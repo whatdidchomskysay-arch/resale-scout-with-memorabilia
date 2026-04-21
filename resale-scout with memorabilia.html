@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Resale Scout">
+<meta name="theme-color" content="#FAF7F2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resale Scout</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8; --paper: #FAF7F2; --ink: #1A1714; --ink-mid: #4A4540;
+    --ink-light: #8A837A; --ink-faint: #C8C0B8; --gold: #B8860B;
+    --gold-light: #F5E6A3; --gold-bg: #FFFBEA; --green: #2D6A4F;
+    --green-light: #D8F3DC; --red: #9B2335; --red-light: #FDECEA;
+    --blue: #1A3A5C; --blue-light: #E8F0F8; --google-blue: #4285F4;
+    --border: rgba(26,23,20,0.12); --border-strong: rgba(26,23,20,0.25);
+    --radius: 4px; --radius-lg: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Instrument Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  .site-header { border-bottom: 1px solid var(--border); background: var(--paper); padding: 0 1.25rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.5px; }
+
+  .engine-wrap { display: flex; align-items: center; gap: 8px; }
+  .engine-label { font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 1px; }
+  .engine-select {
+    font-family: 'DM Mono', monospace; font-size: 12px; padding: 5px 24px 5px 10px;
+    border: 1px solid var(--border-strong); border-radius: var(--radius);
+    background: var(--cream); color: var(--ink); cursor: pointer; outline: none;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238A837A'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+  .engine-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap; }
+  .engine-badge.gemini { background: #E8F0FE; color: var(--google-blue); }
+  .engine-badge.claude { background: #F0EDF8; color: #6B46C1; }
+
+  .keys-panel { background: var(--paper); border-bottom: 1px solid var(--border); padding: 12px 1.25rem; display: flex; flex-direction: column; gap: 8px; }
+  .key-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .key-row label { font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 1px; min-width: 85px; }
+  .key-input { font-family: 'DM Mono', monospace; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--cream); color: var(--ink); flex: 1; min-width: 150px; outline: none; transition: border-color .15s; }
+  .key-input:focus { border-color: var(--gold); }
+  .key-input.inactive { opacity: .4; }
+  .key-status { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-faint); flex-shrink: 0; transition: background .3s; }
+  .key-status.ok { background: var(--green); }
+  .key-saved { font-size: 10px; color: var(--green); font-family: 'DM Mono', monospace; }
+  .get-key { font-size: 11px; color: var(--google-blue); text-decoration: none; white-space: nowrap; }
+  .get-key.claude-link { color: #6B46C1; }
+  .keys-toggle { font-size: 11px; color: var(--ink-light); background: none; border: none; cursor: pointer; text-decoration: underline; align-self: flex-start; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 1.75rem 1.25rem; }
+
+  .page-intro { margin-bottom: 1.75rem; }
+  .page-intro h1 { font-family: 'DM Serif Display', serif; font-size: 34px; letter-spacing: -1px; line-height: 1.1; margin-bottom: 6px; }
+  .page-intro h1 em { font-style: italic; color: var(--gold); }
+  .page-intro p { font-size: 14px; color: var(--ink-mid); line-height: 1.6; max-width: 520px; }
+
+  .mode-row { display: flex; gap: 0; margin-bottom: 1.25rem; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); overflow: hidden; width: fit-content; }
+  .mode-btn { padding: 9px 22px; font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; background: transparent; border: none; color: var(--ink-light); transition: all .15s; display: flex; align-items: center; gap: 6px; }
+  .mode-btn + .mode-btn { border-left: 1px solid var(--border-strong); }
+  .mode-btn.active { background: var(--ink); color: var(--paper); }
+
+  .coin-hint { display: none; background: var(--gold-bg); border: 1px solid rgba(184,134,11,.3); border-radius: var(--radius-lg); padding: 12px 16px; margin-bottom: 1.25rem; font-size: 13px; color: var(--ink-mid); line-height: 1.7; }
+  .coin-hint strong { color: var(--gold); font-weight: 600; }
+
+  .drop-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; background: var(--paper); transition: all .2s; margin-bottom: 1rem; }
+  .drop-zone:hover, .drop-zone.drag { border-color: var(--gold); background: var(--gold-bg); }
+  .drop-zone .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .drop-zone p { font-size: 14px; color: var(--ink-mid); margin-bottom: 3px; }
+  .drop-zone small { font-size: 12px; color: var(--ink-light); }
+  #file-input { display: none; }
+
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; margin-bottom: 1.25rem; }
+  .preview-item { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .preview-item .rm-btn { position: absolute; top: 4px; right: 4px; background: rgba(26,23,20,.7); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .preview-label { font-family: 'DM Mono', monospace; font-size: 10px; position: absolute; bottom: 4px; left: 4px; background: rgba(26,23,20,.6); color: #fff; padding: 2px 5px; border-radius: 3px; }
+
+  .analyze-btn { width: 100%; padding: 13px; background: var(--ink); color: var(--paper); border: none; border-radius: var(--radius-lg); font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .analyze-btn:hover:not(:disabled) { background: #2D2926; }
+  .analyze-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .loading { text-align: center; padding: 3rem 1rem; color: var(--ink-mid); }
+  .loading .spin { width: 28px; height: 28px; border: 2px solid var(--border-strong); border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 14px; }
+  .loading p { font-size: 14px; }
+  .loading small { font-size: 12px; color: var(--ink-light); display: block; margin-top: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box { background: var(--red-light); border: 1px solid rgba(155,35,53,.25); border-radius: var(--radius-lg); padding: 14px 18px; margin-top: 1rem; font-size: 13px; color: var(--red); line-height: 1.6; }
+
+  .results { margin-top: 2rem; }
+  .results-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .results-header h2 { font-family: 'DM Serif Display', serif; font-size: 24px; }
+  .clear-btn { font-size: 13px; color: var(--ink-light); background: none; border: none; cursor: pointer; text-decoration: underline; }
+
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .metric { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px; }
+  .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 5px; }
+  .metric-val { font-family: 'DM Serif Display', serif; font-size: 26px; line-height: 1; }
+  .metric-val.sm { font-size: 13px; padding-top: 5px; line-height: 1.4; }
+
+  .sort-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .sort-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); }
+  .sort-btn { font-family: 'DM Mono', monospace; font-size: 11px; padding: 5px 11px; border: 1px solid var(--border-strong); border-radius: 20px; background: transparent; color: var(--ink-mid); cursor: pointer; transition: all .15s; }
+  .sort-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .sort-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .item-card { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem; margin-bottom: 10px; transition: box-shadow .15s; }
+  .item-card:hover { box-shadow: 0 2px 12px rgba(26,23,20,.06); }
+  .item-card.high { border-left: 3px solid var(--green); }
+  .item-card.medium { border-left: 3px solid var(--gold); }
+  .item-card.skip { border-left: 3px solid var(--ink-faint); opacity: .75; }
+
+  .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .card-num { width: 32px; height: 32px; border-radius: 50%; background: var(--cream); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; flex-shrink: 0; color: var(--ink-mid); }
+  .card-info { flex: 1; min-width: 0; }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; line-height: 1.3; }
+  .card-sub { font-size: 13px; color: var(--ink-mid); margin-bottom: 7px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-gold { background: var(--gold-light); color: #7A5C00; }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-gray { background: var(--cream); color: var(--ink-mid); border: 1px solid var(--border); }
+  .platform-tip { font-size: 11px; color: var(--blue); background: var(--blue-light); padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+
+  .condition-note { font-size: 12px; color: var(--ink-mid); background: var(--cream); border-radius: var(--radius); padding: 7px 11px; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
+
+  .prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .price-box { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 10px 12px; }
+  .price-box.quick { border-color: rgba(184,134,11,.4); background: var(--gold-bg); }
+  .price-box-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 3px; }
+  .price-val { font-family: 'DM Serif Display', serif; font-size: 24px; line-height: 1; }
+  .price-time { font-size: 11px; color: var(--ink-light); margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  .sheldon-display { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .sheldon-grade-big { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500; }
+  .sheldon-bar-wrap { flex: 1; }
+  .sheldon-bar-label { font-size: 10px; color: var(--ink-light); margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .sheldon-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .sheldon-fill { height: 100%; border-radius: 3px; }
+
+  .rationale { font-size: 13px; color: var(--ink-mid); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 9px; }
+
+  .model-banner { border-radius: var(--radius-lg); padding: 9px 14px; margin-bottom: 1.25rem; font-size: 13px; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; }
+  .model-banner.best { background: #E6F4EA; border: 1px solid rgba(45,106,79,.25); color: var(--green); }
+  .model-banner.fallback { background: var(--gold-bg); border: 1px solid rgba(184,134,11,.35); color: #7A5C00; }
+  .model-banner.last { background: var(--red-light); border: 1px solid rgba(155,35,53,.2); color: var(--red); }
+  .model-banner.claude-banner { background: #F0EDF8; border: 1px solid rgba(107,70,193,.2); color: #6B46C1; }
+  .model-banner strong { font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .prices { grid-template-columns: 1fr; }
+    .page-intro h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Resale Scout</div>
+  <div class="engine-wrap">
+    <span class="engine-label">Engine:</span>
+    <select class="engine-select" id="engine-select" onchange="setEngine(this.value)">
+      <option value="gemini">Gemini (free)</option>
+      <option value="claude">Claude Sonnet</option>
+    </select>
+    <span class="engine-badge gemini" id="engine-badge">Free</span>
+  </div>
+</header>
+
+<div class="keys-panel" id="keys-panel">
+  <div class="key-row">
+    <label>Gemini key</label>
+    <input type="password" class="key-input" id="gemini-key" placeholder="AIza..." oninput="checkKeys()">
+    <div class="key-status" id="gemini-status"></div>
+    <span class="key-saved" id="gemini-saved" style="display:none">locked</span>
+    <a class="get-key" href="https://aistudio.google.com/apikey" target="_blank">Get free key</a>
+  </div>
+  <div class="key-row">
+    <label>Claude key</label>
+    <input type="password" class="key-input" id="claude-key" placeholder="sk-ant-..." oninput="checkKeys()">
+    <div class="key-status" id="claude-status"></div>
+    <span class="key-saved" id="claude-saved" style="display:none">locked</span>
+    <a class="get-key claude-link" href="https://console.anthropic.com" target="_blank">Get key</a>
+  </div>
+  <button class="keys-toggle" id="keys-toggle" onclick="toggleKeys()">Hide keys</button>
+</div>
+
+<div class="container">
+  <div class="page-intro">
+    <h1>What's it <em>worth?</em></h1>
+    <p>Upload photos of books, coins, or sports memorabilia. AI identifies each item and estimates resale value — market price, quick-turn price, and time to sell.</p>
+  </div>
+
+  <div class="mode-row">
+    <button class="mode-btn active" id="tab-books" onclick="setMode('books')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Books
+    </button>
+    <button class="mode-btn" id="tab-coins" onclick="setMode('coins')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2m0 8v2M8 12h2m4 0h2"/></svg>
+      Coins
+    </button>
+    <button class="mode-btn" id="tab-memo" onclick="setMode('memo')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Memorabilia
+    </button>
+  </div>
+
+  <div class="coin-hint" id="coin-hint">
+    <strong>Grid tip</strong> — Place coins on a numbered surface and take two photos: <strong>obverse</strong> (heads) then <strong>reverse</strong> (tails). Upload both. The AI matches by grid number, assigns a <strong>Sheldon scale grade</strong>, and values each coin individually.
+  </div>
+
+  <div class="coin-hint" id="memo-hint" style="display:none">
+    <strong>Memorabilia tip</strong> — Works best with one item per photo, or a small flat lay of related items. For programs and publications, photograph the <strong>cover clearly</strong> and include a second shot of the <strong>spine and back</strong> if condition matters. Include any signatures in frame. The AI assesses event significance, featured players, era, condition, and signatures.
+  </div>
+
+  <div class="drop-zone" id="drop-zone"
+    onclick="document.getElementById('file-input').click()"
+    ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+    <span class="icon">📷</span>
+    <p id="upload-label">Tap to take a photo or select images</p>
+    <small id="upload-hint">JPG, PNG, WEBP — multiple files OK</small>
+  </div>
+  <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+
+  <div class="preview-grid" id="preview-grid"></div>
+
+  <button class="analyze-btn" id="analyze-btn" disabled onclick="analyze()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <span id="analyze-label">Analyze with Gemini</span>
+  </button>
+
+  <div id="error-area"></div>
+  <div id="results-area"></div>
+</div>
+
+<script>
+var mode = 'books';
+var engine = 'gemini';
+var images = [];
+var lastResult = null;
+var keysVisible = true;
+
+// ── INIT ──────────────────────────────────────────────
+function init() {
+  try {
+    var gk = localStorage.getItem('rs_gemini_key');
+    var ck = localStorage.getItem('rs_claude_key');
+    var eng = localStorage.getItem('rs_engine') || 'gemini';
+    if (gk) document.getElementById('gemini-key').value = gk;
+    if (ck) document.getElementById('claude-key').value = ck;
+    document.getElementById('engine-select').value = eng;
+    setEngine(eng, true);
+  } catch(e) {}
+  checkKeys();
+}
+
+// ── ENGINE ────────────────────────────────────────────
+function setEngine(e, silent) {
+  engine = e;
+  if (!silent) { try { localStorage.setItem('rs_engine', e); } catch(ex) {} }
+  var badge = document.getElementById('engine-badge');
+  var label = document.getElementById('analyze-label');
+  if (e === 'gemini') {
+    badge.textContent = 'Free'; badge.className = 'engine-badge gemini';
+    label.textContent = 'Analyze with Gemini';
+  } else {
+    badge.textContent = '~$0.05/run'; badge.className = 'engine-badge claude';
+    label.textContent = 'Analyze with Claude';
+  }
+  document.getElementById('gemini-key').classList.toggle('inactive', e !== 'gemini');
+  document.getElementById('claude-key').classList.toggle('inactive', e !== 'claude');
+  updateBtn();
+}
+
+// ── KEYS ──────────────────────────────────────────────
+function checkKeys() {
+  var gk = document.getElementById('gemini-key').value.trim();
+  var ck = document.getElementById('claude-key').value.trim();
+  var gv = gk.length > 20; // Gemini keys usually start with AIza but format can vary
+  var cv = ck.startsWith('sk-ant-') && ck.length > 20;
+  document.getElementById('gemini-status').classList.toggle('ok', gv);
+  document.getElementById('claude-status').classList.toggle('ok', cv);
+  document.getElementById('gemini-saved').style.display = gv ? 'inline' : 'none';
+  document.getElementById('claude-saved').style.display = cv ? 'inline' : 'none';
+  if (gv) { try { localStorage.setItem('rs_gemini_key', gk); } catch(e) {} }
+  if (cv) { try { localStorage.setItem('rs_claude_key', ck); } catch(e) {} }
+  updateBtn();
+}
+
+function toggleKeys() {
+  keysVisible = !keysVisible;
+  var rows = document.querySelectorAll('.key-row');
+  rows.forEach(function(r) { r.style.display = keysVisible ? 'flex' : 'none'; });
+  document.getElementById('keys-toggle').textContent = keysVisible ? 'Hide keys' : 'Show keys';
+}
+
+function activeKey() {
+  return engine === 'gemini'
+    ? document.getElementById('gemini-key').value.trim()
+    : document.getElementById('claude-key').value.trim();
+}
+
+function updateBtn() {
+  document.getElementById('analyze-btn').disabled = images.length === 0 || activeKey().length < 10;
+}
+
+// ── ITEM MODE ─────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('tab-books').classList.toggle('active', m === 'books');
+  document.getElementById('tab-coins').classList.toggle('active', m === 'coins');
+  document.getElementById('tab-memo').classList.toggle('active', m === 'memo');
+  document.getElementById('coin-hint').style.display = m === 'coins' ? 'block' : 'none';
+  document.getElementById('memo-hint').style.display = m === 'memo' ? 'block' : 'none';
+  document.getElementById('upload-hint').textContent = m === 'coins'
+    ? 'Upload obverse + reverse grid photos'
+    : m === 'memo'
+    ? 'Cover photo + spine/back — one item or small flat lay'
+    : 'Shelf photos or individual book images';
+}
+
+// ── IMAGES ────────────────────────────────────────────
+function handleDrop(e) { e.preventDefault(); document.getElementById('drop-zone').classList.remove('drag'); handleFiles(e.dataTransfer.files); }
+function handleDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag'); }
+function handleDragLeave() { document.getElementById('drop-zone').classList.remove('drag'); }
+
+// Compress image to stay under API limits (Claude: 5MB, Gemini: 4MB)
+// Also caps resolution to 1600px max dimension for faster analysis
+function compressImage(dataUrl, mimeType, callback) {
+  var img = new Image();
+  img.onload = function() {
+    var MAX_DIM = 1600;
+    var MAX_BYTES = 3.8 * 1024 * 1024; // 3.8MB safe limit for both APIs
+    var w = img.width, h = img.height;
+    if (w > MAX_DIM || h > MAX_DIM) {
+      if (w > h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+      else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+    }
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    var quality = 0.88;
+    var result = canvas.toDataURL('image/jpeg', quality);
+    // If still too big, reduce quality iteratively
+    while (result.length * 0.75 > MAX_BYTES && quality > 0.4) {
+      quality -= 0.1;
+      result = canvas.toDataURL('image/jpeg', quality);
+    }
+    callback(result, 'image/jpeg');
+  };
+  img.src = dataUrl;
+}
+
+function handleFiles(files) {
+  Array.from(files).forEach(function(f) {
+    if (!f.type.startsWith('image/')) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      compressImage(e.target.result, f.type, function(compressed, mimeType) {
+        images.push({ src: compressed, type: mimeType });
+        renderPreviews();
+      });
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeImg(i) { images.splice(i, 1); renderPreviews(); }
+function imgSizeKB(src) { return Math.round(src.length * 0.75 / 1024); }
+
+function renderPreviews() {
+  var coinLabels = ['Obverse', 'Reverse', 'Detail', 'Extra'];
+  document.getElementById('preview-grid').innerHTML = images.map(function(img, i) {
+    var kb = imgSizeKB(img.src);
+    var sizeLabel = kb > 1024 ? (kb/1024).toFixed(1) + 'MB' : kb + 'KB';
+    return '<div class="preview-item"><img src="' + img.src + '" alt="">' +
+      (mode === 'coins' && coinLabels[i] ? '<span class="preview-label">' + coinLabels[i] + '</span>' : '<span class="preview-label">' + sizeLabel + '</span>') +
+      '<button class="rm-btn" onclick="removeImg(' + i + ')">x</button></div>';
+  }).join('');
+  var totalKB = images.reduce(function(sum, img) { return sum + imgSizeKB(img.src); }, 0);
+  var totalLabel = totalKB > 1024 ? (totalKB/1024).toFixed(1) + 'MB' : totalKB + 'KB';
+  document.getElementById('upload-label').textContent = images.length > 0
+    ? images.length + ' image' + (images.length > 1 ? 's' : '') + ' ready (' + totalLabel + ' total)'
+    : 'Tap to take a photo or select images';
+  updateBtn();
+}
+
+// ── PROMPTS ───────────────────────────────────────────
+var PROMPT_BOOKS = 'You are an expert used book buyer and reseller. Analyze the uploaded image(s) of books and identify every visible book.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0"},"items":[{"id":1,"title":"Title","author":"Author","condition":"Good","condition_notes":"notes","market_price":"$10","quick_price":"$7","time_to_sell_market":"2-4 weeks","time_to_sell_quick":"3-7 days","priority":"medium","platform_tip":"eBay","rationale":"reason"}]}';
+
+var PROMPT_COINS = 'You are a professional numismatist. Analyze the uploaded image(s) of coins on a numbered grid. If two images: first=obverse (heads), second=reverse (tails). Match coins by grid number.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_coins":0,"total_market_value":"$0","highlight":"note"},"items":[{"id":"Grid #1","coin_name":"1921-D Morgan Silver Dollar","denomination":"Dollar","year":"1921","mint_mark":"D","sheldon_grade":"VF-30","grade_confidence":"medium","grade_notes":"notes","obverse_notes":"notes","reverse_notes":"notes","market_price":"$25","quick_price":"$18","time_to_sell_market":"1-3 weeks","time_to_sell_quick":"2-5 days","priority":"medium","rationale":"reason"}]}';
+
+var PROMPT_MEMO = 'You are an expert sports memorabilia appraiser and reseller with deep knowledge of game programs, publications, tickets, scorecards, yearbooks, media guides, pennants, and paper ephemera from the 1900s to present. Analyze the uploaded image(s) and identify each item.\nFor each item assess: sport and team, event type (championship/playoff vs regular season), date/era, featured athletes or notable figures, any visible signatures, condition of cover/spine/interior, and scarcity.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0","highlight":"most notable item"},"items":[{"id":1,"item_type":"Game Program","title":"1967 World Series Program - Cardinals vs Red Sox","sport":"Baseball","teams":"St. Louis Cardinals vs Boston Red Sox","event_type":"World Series Game 1","date_era":"October 1967","featured_players":"Bob Gibson, Carl Yastrzemski","signatures":"None visible","condition":"Very Good","condition_notes":"Cover bright, minor spine wear, no writing","market_price":"$85","quick_price":"$55","time_to_sell_market":"2-6 weeks","time_to_sell_quick":"5-10 days","priority":"high","platform_tip":"eBay, Heritage Auctions","rationale":"World Series programs from the 1960s command strong premiums especially Cardinals-Red Sox rivalry"}]}';
+
+// ── JSON REPAIR ───────────────────────────────────────
+function extractJSON(raw) {
+  var text = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  var start = text.indexOf('{'), end = text.lastIndexOf('}');
+  if (start === -1 || end === -1) throw new Error('No JSON found in response.');
+  text = text.slice(start, end + 1);
+  try { return JSON.parse(text); } catch(e) {}
+  text = text
+    .replace(/,\s*([}\]])/g, '$1')
+    .replace(/:\s*None\b/g, ': null')
+    .replace(/:\s*True\b/g, ': true')
+    .replace(/:\s*False\b/g, ': false');
+  try { return JSON.parse(text); } catch(e) {}
+  var itemsMatch = text.match(/"items"\s*:\s*\[[\s\S]*\]/);
+  var summaryMatch = text.match(/"summary"\s*:\s*\{[^}]*\}/);
+  if (itemsMatch) {
+    try { return JSON.parse('{' + (summaryMatch ? summaryMatch[0] + ',' : '') + itemsMatch[0] + '}'); } catch(e) {}
+  }
+  throw new Error('Could not parse AI response. Please try again.');
+}
+
+// ── GEMINI CASCADE ────────────────────────────────────
+var GEMINI_MODELS = [
+  { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', tier: 'best', note: 'Using <strong>Gemini 2.5 Flash</strong> — best free model.' },
+  { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite', tier: 'fallback', note: '<strong>Fell back to Gemini 2.5 Flash-Lite</strong> — 2.5 Flash was overloaded. Results may be slightly less detailed.' },
+  { id: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', tier: 'last', note: '<strong>Using Gemini 2.0 Flash (older fallback)</strong> — both 2.5 models overloaded. Try again later for best results.' }
+];
+
+async function callGemini(apiKey, parts, model) {
+  var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model.id + ':generateContent?key=' + apiKey, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: parts }], generationConfig: { temperature: 0.2, maxOutputTokens: 4096, responseMimeType: "application/json" } })
+  });
+  if (!resp.ok) {
+    var err = await resp.json().catch(function() { return {}; });
+    var msg = (err.error && err.error.message) || ('HTTP ' + resp.status);
+    if (resp.status === 400 && msg.toLowerCase().indexOf('api_key') !== -1) throw new Error('__FATAL__Invalid API key.');
+    throw new Error('__RETRY__' + msg);
+  }
+  var data = await resp.json();
+  // Check for safety blocks or empty candidates
+  if (!data.candidates || data.candidates.length === 0) {
+    var reason = (data.promptFeedback && data.promptFeedback.blockReason) || 'unknown';
+    throw new Error('__RETRY__Response blocked or empty (reason: ' + reason + '). Try again.');
+  }
+  var candidate = data.candidates[0];
+  // Check finish reason - RECITATION/SAFETY means blocked
+  if (candidate.finishReason && candidate.finishReason !== 'STOP' && candidate.finishReason !== 'MAX_TOKENS') {
+    throw new Error('__RETRY__Response stopped early (' + candidate.finishReason + '). Try again.');
+  }
+  var raw = (candidate.content && candidate.content.parts && candidate.content.parts[0] && candidate.content.parts[0].text) || '';
+  if (!raw) throw new Error('__RETRY__Empty response.');
+  return raw;
+}
+
+async function runGemini(apiKey, prompt) {
+  var parts = images.map(function(img) {
+    return { inline_data: { mime_type: img.type || 'image/jpeg', data: img.src.split(',')[1] } };
+  });
+  parts.push({ text: prompt });
+  for (var i = 0; i < GEMINI_MODELS.length; i++) {
+    var model = GEMINI_MODELS[i];
+    setStatus(i === 0 ? 'Analyzing with Gemini...' : 'Trying ' + model.label + '...', i > 0 ? 'Previous model overloaded' : 'This may take 10-20 seconds');
+    try {
+      var raw = await callGemini(apiKey, parts, model);
+      return { raw: raw, model: model };
+    } catch(err) {
+      if (err.message.startsWith('__FATAL__')) throw new Error(err.message.replace('__FATAL__', ''));
+      if (i === GEMINI_MODELS.length - 1) throw new Error('All Gemini models are overloaded. Wait a minute and try again.');
+    }
+  }
+}
+
+// ── CLAUDE ────────────────────────────────────────────
+async function runClaude(apiKey, prompt) {
+  setStatus('Analyzing with Claude Sonnet...', 'This may take 15-25 seconds');
+  var msgContent = images.map(function(img) {
+    return { type: 'image', source: { type: 'base64', media_type: img.type || 'image/jpeg', data: img.src.split(',')[1] } };
+  });
+  msgContent.push({ type: 'text', text: prompt });
+  var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4000, messages: [{ role: 'user', content: msgContent }] })
+  });
+  if (!resp.ok) {
+    var err = await resp.json().catch(function() { return {}; });
+    var msg = (err.error && err.error.message) || ('HTTP ' + resp.status);
+    if (resp.status === 401) throw new Error('Invalid Claude API key. Check it at console.anthropic.com');
+    if (resp.status === 429) throw new Error('Claude rate limit hit. Wait a moment and try again.');
+    if (resp.status === 413 || msg.indexOf('exceeds') !== -1) throw new Error('Image still too large after compression. Try a lower-resolution photo.');
+    throw new Error(msg);
+  }
+  var data = await resp.json();
+  var raw = (data.content || []).map(function(b) { return b.text || ''; }).join('');
+  if (!raw) throw new Error('Empty response from Claude.');
+  return raw;
+}
+
+// ── ANALYZE ───────────────────────────────────────────
+async function analyze() {
+  var key = activeKey();
+  if (!key) { showError('Please enter your ' + (engine === 'gemini' ? 'Gemini' : 'Claude') + ' API key above.'); return; }
+  document.getElementById('error-area').innerHTML = '';
+  document.getElementById('results-area').innerHTML = '';
+  document.getElementById('analyze-btn').disabled = true;
+  var prompt = (mode === 'books' ? PROMPT_BOOKS : mode === 'coins' ? PROMPT_COINS : PROMPT_MEMO) + '\n\nAnalyze all items and return the JSON.';
+  try {
+    var raw, bannerInfo;
+    if (engine === 'gemini') {
+      var res = await runGemini(key, prompt);
+      raw = res.raw;
+      bannerInfo = { cls: res.model.tier, note: res.model.note };
+    } else {
+      raw = await runClaude(key, prompt);
+      bannerInfo = { cls: 'claude-banner', note: 'Analyzed with <strong>Claude Sonnet</strong> — highest accuracy for book spine reading, coin grading, and memorabilia appraisal.' };
+    }
+    renderResults(extractJSON(raw), bannerInfo);
+  } catch(err) {
+    document.getElementById('results-area').innerHTML = '';
+    showError('Analysis failed: ' + err.message);
+  } finally {
+    document.getElementById('analyze-btn').disabled = false;
+    updateBtn();
+  }
+}
+
+function setStatus(msg, sub) {
+  document.getElementById('results-area').innerHTML = '<div class="loading"><div class="spin"></div><p>' + msg + '</p>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+}
+function showError(msg) {
+  document.getElementById('error-area').innerHTML = '<div class="error-box">' + msg + '</div>';
+}
+
+// ── SORT ──────────────────────────────────────────────
+function parsePrice(str) {
+  if (!str) return 0;
+  var nums = (str + '').replace(/[^0-9.]/g, ' ').trim().split(/\s+/).map(Number).filter(function(n) { return !isNaN(n) && n > 0; });
+  return nums.length ? nums.reduce(function(a, b) { return a + b; }, 0) / nums.length : 0;
+}
+function priorityOrder(p) { return p === 'high' ? 0 : p === 'medium' ? 1 : 2; }
+
+function setSort(key) {
+  document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.sort === key); });
+  if (!lastResult) return;
+  var sorted = (lastResult.items || []).slice();
+  if (key === 'market-desc') sorted.sort(function(a, b) { return parsePrice(b.market_price) - parsePrice(a.market_price); });
+  else if (key === 'market-asc') sorted.sort(function(a, b) { return parsePrice(a.market_price) - parsePrice(b.market_price); });
+  else if (key === 'quick-desc') sorted.sort(function(a, b) { return parsePrice(b.quick_price) - parsePrice(a.quick_price); });
+  else if (key === 'priority') sorted.sort(function(a, b) { return priorityOrder(a.priority) - priorityOrder(b.priority); });
+  document.getElementById('items-list').innerHTML = buildCards(sorted, mode);
+}
+
+// ── RENDER HELPERS ────────────────────────────────────
+function sheldonPct(grade) {
+  if (!grade) return 30;
+  var g = grade.toUpperCase();
+  var map = { 'PO': 2, 'FR': 4, 'AG': 6, 'G': 10, 'VG': 16, 'F': 24, 'VF': 40, 'EF': 55, 'AU': 68, 'MS': 82, 'PF': 90, 'PR': 90 };
+  for (var key in map) { if (g.startsWith(key)) return Math.min(98, map[key] + (parseInt(g.replace(/[^0-9]/g, '')) || 0) / 70 * 20); }
+  return Math.min(98, (parseInt(grade) || 30) / 70 * 100);
+}
+function sheldonColor(p) { return p >= 70 ? '#2D6A4F' : p >= 45 ? '#B8860B' : '#8A837A'; }
+function pBadge(p) {
+  if (p === 'high') return '<span class="badge badge-green">High value</span>';
+  if (p === 'medium') return '<span class="badge badge-gold">Medium value</span>';
+  return '<span class="badge badge-gray">Skip</span>';
+}
+function cBadge(c) {
+  if (c === 'high') return '<span class="badge badge-green">Grade: confident</span>';
+  if (c === 'medium') return '<span class="badge badge-gold">Grade: estimated</span>';
+  return '<span class="badge badge-red">Grade: uncertain</span>';
+}
+
+function buildCards(items, currentMode) {
+  var isCoins = currentMode === 'coins';
+  var isMemo = currentMode === 'memo';
+  return items.map(function(item, idx) {
+    var pc = item.priority === 'high' ? 'high' : item.priority === 'medium' ? 'medium' : 'skip';
+    if (isMemo) {
+      return '<div class="item-card ' + pc + '">' +
+        '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
+        '<div class="card-title">' + (item.title || item.item_type || 'Unknown item') + '</div>' +
+        '<div class="card-sub">' + [item.sport, item.teams, item.date_era].filter(Boolean).join(' · ') + '</div>' +
+        '<div class="badges">' + pBadge(item.priority) +
+        (item.event_type ? ' <span class="badge badge-blue">' + item.event_type + '</span>' : '') +
+        (item.signatures && item.signatures !== 'None' && item.signatures !== 'None visible' && item.signatures !== 'none' ? ' <span class="badge badge-green">Signed</span>' : '') +
+        (item.platform_tip ? ' <span class="platform-tip">' + item.platform_tip + '</span>' : '') +
+        '</div></div></div>' +
+        (item.featured_players ? '<div class="condition-note"><strong>Notable players:</strong> ' + item.featured_players + '</div>' : '') +
+        (item.condition_notes ? '<div class="condition-note"><strong>Condition (' + (item.condition||'') + '):</strong> ' + item.condition_notes + '</div>' : '') +
+        '<div class="prices">' +
+        '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
+        '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
+    } else if (isCoins) {
+      var pct = sheldonPct(item.sheldon_grade);
+      return '<div class="item-card ' + pc + '">' +
+        '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
+        '<div class="card-title">' + (item.id || '') + ' \u2014 ' + (item.coin_name || 'Unknown coin') + '</div>' +
+        '<div class="card-sub">' + (item.year || '') + (item.mint_mark && item.mint_mark !== 'None' && item.mint_mark !== 'none' ? ' \u00b7 ' + item.mint_mark + ' mint' : '') + (item.denomination ? ' \u00b7 ' + item.denomination : '') + '</div>' +
+        '<div class="badges">' + pBadge(item.priority) + ' ' + cBadge(item.grade_confidence) + '</div></div></div>' +
+        '<div class="sheldon-display"><div class="sheldon-grade-big">' + (item.sheldon_grade || '?') + '</div>' +
+        '<div class="sheldon-bar-wrap"><div class="sheldon-bar-label"><span>Poor</span><span>Fine</span><span>MS-70</span></div>' +
+        '<div class="sheldon-bar"><div class="sheldon-fill" style="width:' + pct.toFixed(1) + '%;background:' + sheldonColor(pct) + '"></div></div></div></div>' +
+        (item.grade_notes ? '<div class="condition-note">' + item.grade_notes + '</div>' : '') +
+        '<div class="prices">' +
+        '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
+        '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
+    } else {
+      // books
+      return '<div class="item-card ' + pc + '">' +
+        '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
+        '<div class="card-title">' + (item.title || 'Unknown title') + '</div>' +
+        '<div class="card-sub">' + (item.author || '') + '</div>' +
+        '<div class="badges">' + pBadge(item.priority) + ' <span class="badge badge-blue">' + (item.condition || '?') + '</span>' + (item.platform_tip ? ' <span class="platform-tip">' + item.platform_tip + '</span>' : '') + '</div></div></div>' +
+        (item.condition_notes ? '<div class="condition-note">' + item.condition_notes + '</div>' : '') +
+        '<div class="prices">' +
+        '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
+        '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
+    }
+  }).join('');
+}
+
+function renderResults(result, bannerInfo) {
+  lastResult = result;
+  var items = result.items || [];
+  var s = result.summary || {};
+  var isCoins = mode === 'coins';
+  var isMemo = mode === 'memo';
+  var modeLabel = isCoins ? 'Coin' : isMemo ? 'Memorabilia' : 'Book';
+  var foundLabel = isCoins ? 'Coins' : isMemo ? 'Items' : 'Books';
+  var totalLabel = isCoins ? 'Est. total' : isMemo ? 'Est. total' : 'Worth listing';
+  var totalVal = isCoins ? (s.total_market_value || '\u2014') : isMemo ? (s.total_market_value || '\u2014') : (s.worth_listing !== undefined ? s.worth_listing : '\u2014');
+  var highlightLabel = isCoins ? 'Top find' : isMemo ? 'Top find' : 'Value range';
+  var highlightVal = isCoins ? (s.highlight || '\u2014') : isMemo ? (s.highlight || '\u2014') : (s.total_market_value || '\u2014');
+  document.getElementById('results-area').innerHTML =
+    '<div class="results">' +
+    '<div class="model-banner ' + bannerInfo.cls + '">' + bannerInfo.note + '</div>' +
+    '<div class="results-header"><h2>' + modeLabel + ' assessment</h2><button class="clear-btn" onclick="clearAll()">Clear &amp; start over</button></div>' +
+    '<div class="metrics">' +
+    '<div class="metric"><div class="metric-label">' + foundLabel + ' found</div><div class="metric-val">' + (isCoins ? (s.total_coins || items.length) : (s.total_items || items.length)) + '</div></div>' +
+    '<div class="metric"><div class="metric-label">' + totalLabel + '</div><div class="metric-val">' + totalVal + '</div></div>' +
+    '<div class="metric"><div class="metric-label">' + highlightLabel + '</div><div class="metric-val sm">' + highlightVal + '</div></div>' +
+    '</div>' +
+    '<div class="sort-bar"><span class="sort-label">Sort:</span>' +
+    '<button class="sort-btn active" data-sort="detected" onclick="setSort(\'detected\')">As detected</button>' +
+    '<button class="sort-btn" data-sort="market-desc" onclick="setSort(\'market-desc\')">Market \u2193</button>' +
+    '<button class="sort-btn" data-sort="market-asc" onclick="setSort(\'market-asc\')">Market \u2191</button>' +
+    '<button class="sort-btn" data-sort="quick-desc" onclick="setSort(\'quick-desc\')">Quick-turn \u2193</button>' +
+    '<button class="sort-btn" data-sort="priority" onclick="setSort(\'priority\')">Priority</button>' +
+    '</div>' +
+    '<div id="items-list">' + buildCards(items, mode) + '</div>' +
+    '</div>';
+  document.getElementById('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function clearAll() {
+  images = []; lastResult = null;
+  renderPreviews();
+  document.getElementById('results-area').innerHTML = '';
+  document.getElementById('error-area').innerHTML = '';
+}
+
+init();
+</script>
+</body>
+</html>
