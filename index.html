@@ -39,6 +39,7 @@
   .engine-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap; }
   .engine-badge.gemini { background: #E8F0FE; color: var(--google-blue); }
   .engine-badge.claude { background: #F0EDF8; color: #6B46C1; }
+  .engine-badge.grok { background: #F0F0F0; color: #111; }
 
   .keys-panel { background: var(--paper); border-bottom: 1px solid var(--border); padding: 12px 1.25rem; display: flex; flex-direction: column; gap: 8px; }
   .key-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -67,6 +68,15 @@
 
   .coin-hint { display: none; background: var(--gold-bg); border: 1px solid rgba(184,134,11,.3); border-radius: var(--radius-lg); padding: 12px 16px; margin-bottom: 1.25rem; font-size: 13px; color: var(--ink-mid); line-height: 1.7; }
   .coin-hint strong { color: var(--gold); font-weight: 600; }
+  .pairing-panel { display: none; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1.25rem; }
+  .pairing-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 10px; }
+  .pairing-options { display: flex; flex-direction: column; gap: 8px; }
+  .pairing-option { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  .pairing-option input[type=radio] { margin-top: 3px; flex-shrink: 0; accent-color: var(--ink); }
+  .pairing-option-text { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+  .pairing-option-text strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 1px; }
+  .grid-cols-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; margin-left: 22px; font-size: 13px; color: var(--ink-mid); }
+  .grid-cols-row input[type=number] { width: 52px; font-family: "DM Mono", monospace; font-size: 13px; padding: 4px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--cream); color: var(--ink); outline: none; text-align: center; }
 
   .drop-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; background: var(--paper); transition: all .2s; margin-bottom: 1rem; }
   .drop-zone:hover, .drop-zone.drag { border-color: var(--gold); background: var(--gold-bg); }
@@ -132,9 +142,10 @@
 
   .condition-note { font-size: 12px; color: var(--ink-mid); background: var(--cream); border-radius: var(--radius); padding: 7px 11px; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
 
-  .prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .prices { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
   .price-box { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 10px 12px; }
   .price-box.quick { border-color: rgba(184,134,11,.4); background: var(--gold-bg); }
+  .price-box.dealer { border-color: rgba(155,35,53,.2); background: var(--red-light); }
   .price-box-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 3px; }
   .price-val { font-family: 'DM Serif Display', serif; font-size: 24px; line-height: 1; }
   .price-time { font-size: 11px; color: var(--ink-light); margin-top: 2px; font-family: 'DM Mono', monospace; }
@@ -147,6 +158,18 @@
   .sheldon-fill { height: 100%; border-radius: 3px; }
 
   .rationale { font-size: 13px; color: var(--ink-mid); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 9px; }
+  .notes-wrap { margin-bottom: 1.25rem; }
+  .notes-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .notes-label span { font-size: 11px; color: var(--ink-faint); text-transform: none; letter-spacing: 0; font-style: italic; }
+  .notes-field { width: 100%; font-family: "Instrument Sans", sans-serif; font-size: 13px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); background: var(--paper); color: var(--ink); resize: vertical; min-height: 70px; max-height: 200px; outline: none; transition: border-color .15s; line-height: 1.6; }
+  .notes-field:focus { border-color: var(--gold); }
+  .notes-field::placeholder { color: var(--ink-faint); }
+  .notes-wrap { margin-bottom: 1.25rem; }
+  .notes-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-light); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .notes-label span { font-size: 11px; color: var(--ink-faint); text-transform: none; letter-spacing: 0; font-style: italic; }
+  .notes-field { width: 100%; font-family: 'Instrument Sans', sans-serif; font-size: 13px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); background: var(--paper); color: var(--ink); resize: vertical; min-height: 70px; max-height: 200px; outline: none; transition: border-color .15s; line-height: 1.6; }
+  .notes-field:focus { border-color: var(--gold); }
+  .notes-field::placeholder { color: var(--ink-faint); }
 
   .model-banner { border-radius: var(--radius-lg); padding: 9px 14px; margin-bottom: 1.25rem; font-size: 13px; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; }
   .model-banner.best { background: #E6F4EA; border: 1px solid rgba(45,106,79,.25); color: var(--green); }
@@ -155,10 +178,40 @@
   .model-banner.claude-banner { background: #F0EDF8; border: 1px solid rgba(107,70,193,.2); color: #6B46C1; }
   .model-banner strong { font-weight: 600; }
 
+  /* ── COMPARISON MODE ── */
+  .engine-checkboxes { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .engine-check { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 13px; color: var(--ink-mid); user-select: none; }
+  .engine-check input[type=checkbox] { accent-color: var(--ink); width: 15px; height: 15px; cursor: pointer; }
+  .engine-check.disabled { opacity: .35; pointer-events: none; }
+  .compare-banner { background: #E8F0FE; border: 1px solid rgba(66,133,244,.3); border-radius: var(--radius-lg); padding: 10px 14px; margin-bottom: 1.25rem; font-size: 13px; color: var(--blue); }
+
+  .compare-table-wrap { overflow-x: auto; margin-top: 2rem; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .compare-table th { background: var(--ink); color: var(--paper); padding: 10px 12px; text-align: left; font-weight: 500; white-space: nowrap; }
+  .compare-table th.engine-col { text-align: center; min-width: 160px; }
+  .compare-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: var(--paper); }
+  .compare-table tr:nth-child(odd) td { background: var(--cream); }
+  .compare-table td.item-label { font-weight: 600; color: var(--ink); white-space: nowrap; border-right: 1px solid var(--border-strong); background: var(--paper) !important; min-width: 130px; }
+  .compare-table td.engine-cell { text-align: center; }
+  .compare-table td.field-label { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--ink-light); background: var(--ink) !important; color: var(--paper) !important; font-weight: 500; padding: 6px 12px; }
+  .cell-val { font-family: "DM Mono", monospace; font-size: 12px; }
+  .cell-price { font-family: "DM Serif Display", serif; font-size: 18px; line-height: 1; }
+  .cell-grade { font-family: "DM Mono", monospace; font-size: 15px; font-weight: 500; }
+  .cell-note { font-size: 11px; color: var(--ink-light); margin-top: 2px; line-height: 1.4; }
+  .grade-bar { height: 4px; border-radius: 2px; margin-top: 4px; }
+  .diff-flag { font-size: 10px; padding: 2px 6px; border-radius: 10px; background: var(--gold-light); color: #7A5C00; font-weight: 500; display: inline-block; margin-top: 3px; }
+  .err-cell { font-size: 11px; color: var(--red); font-style: italic; }
+  .loading-cell { font-size: 11px; color: var(--ink-light); font-style: italic; }
+  .section-header td { background: var(--cream) !important; font-size: 12px; font-weight: 600; color: var(--ink-mid); text-transform: uppercase; letter-spacing: .8px; padding: 8px 12px; border-top: 2px solid var(--border-strong); }
+
   @media (max-width: 560px) {
     .metrics { grid-template-columns: 1fr 1fr; }
-    .prices { grid-template-columns: 1fr; }
+    .prices { grid-template-columns: 1fr 1fr; }
     .page-intro h1 { font-size: 26px; }
+  }
+  @media (max-width: 380px) {
+    .prices { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -167,12 +220,21 @@
 <header class="site-header">
   <div class="logo">Resale Scout</div>
   <div class="engine-wrap">
-    <span class="engine-label">Engine:</span>
-    <select class="engine-select" id="engine-select" onchange="setEngine(this.value)">
-      <option value="gemini">Gemini (free)</option>
-      <option value="claude">Claude Sonnet</option>
-    </select>
-    <span class="engine-badge gemini" id="engine-badge">Free</span>
+    <span class="engine-label">Run:</span>
+    <div class="engine-checkboxes">
+      <label class="engine-check" id="chk-gemini-wrap">
+        <input type="checkbox" id="chk-gemini" checked onchange="updateEngineState()">
+        <span class="engine-badge gemini">Gemini</span>
+      </label>
+      <label class="engine-check" id="chk-claude-wrap">
+        <input type="checkbox" id="chk-claude" onchange="updateEngineState()">
+        <span class="engine-badge claude">Claude</span>
+      </label>
+      <label class="engine-check" id="chk-grok-wrap">
+        <input type="checkbox" id="chk-grok" onchange="updateEngineState()">
+        <span class="engine-badge grok">Grok</span>
+      </label>
+    </div>
   </div>
 </header>
 
@@ -190,6 +252,13 @@
     <div class="key-status" id="claude-status"></div>
     <span class="key-saved" id="claude-saved" style="display:none">locked</span>
     <a class="get-key claude-link" href="https://console.anthropic.com" target="_blank">Get key</a>
+  </div>
+  <div class="key-row" id="grok-key-row">
+    <label>Grok key</label>
+    <input type="password" class="key-input inactive" id="grok-key" placeholder="xai-..." oninput="checkKeys()">
+    <div class="key-status" id="grok-status"></div>
+    <span class="key-saved" id="grok-saved" style="display:none">locked</span>
+    <a class="get-key" href="https://console.x.ai" target="_blank" style="color:#111">Get key</a>
   </div>
   <button class="keys-toggle" id="keys-toggle" onclick="toggleKeys()">Hide keys</button>
 </div>
@@ -213,14 +282,74 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       Memorabilia
     </button>
+    <button class="mode-btn" id="tab-glass" onclick="setMode('glass')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3l-1 9h10L16 3H8z"/><path d="M7 12c0 5 2 7 5 7s5-2 5-7"/></svg>
+      Glassware
+    </button>
+    <button class="mode-btn" id="tab-elec" onclick="setMode('elec')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      Electronics
+    </button>
   </div>
 
   <div class="coin-hint" id="coin-hint">
-    <strong>Grid tip</strong> — Place coins on a numbered surface and take two photos: <strong>obverse</strong> (heads) then <strong>reverse</strong> (tails). Upload both. The AI matches by grid number, assigns a <strong>Sheldon scale grade</strong>, and values each coin individually.
+    Select a pairing method below, then upload your photos.
+  </div>
+
+  <div class="pairing-panel" id="pairing-panel">
+    <div class="pairing-title">How are your coin photos arranged?</div>
+    <div class="pairing-options">
+
+      <label class="pairing-option">
+        <input type="radio" name="pairing" value="numbered" id="pair-numbered" onchange="setPairing('numbered')">
+        <div class="pairing-option-text">
+          <strong>Numbered grid</strong>
+          Each coin position has a visible number in the photo. AI matches obverse and reverse by that number.
+        </div>
+      </label>
+      <div class="grid-cols-row" id="grid-cols-row" style="display:none">
+        <span>Grid columns:</span>
+        <input type="number" id="grid-cols" min="1" max="10" value="3">
+        <span style="color:var(--ink-light);font-size:12px">(helps with mirror-flip math)</span>
+      </div>
+
+      <label class="pairing-option">
+        <input type="radio" name="pairing" value="mirror" id="pair-mirror" onchange="setPairing('mirror')" checked>
+        <div class="pairing-option-text">
+          <strong>Unnumbered grid — flipped over</strong>
+          Same grid layout, physically flipped. AI knows the reverse image is a horizontal mirror of the obverse.
+        </div>
+      </label>
+
+      <label class="pairing-option">
+        <input type="radio" name="pairing" value="sequential" id="pair-sequential" onchange="setPairing('sequential')">
+        <div class="pairing-option-text">
+          <strong>Sequential pairs — one coin at a time</strong>
+          Images uploaded in obverse/reverse pairs: image 1+2 are coin 1, image 3+4 are coin 2, etc.
+        </div>
+      </label>
+
+      <label class="pairing-option">
+        <input type="radio" name="pairing" value="obverse" id="pair-obverse" onchange="setPairing('obverse')">
+        <div class="pairing-option-text">
+          <strong>Obverse only</strong>
+          Single-sided photos only. AI grades and values from the front face alone.
+        </div>
+      </label>
+
+    </div>
   </div>
 
   <div class="coin-hint" id="memo-hint" style="display:none">
     <strong>Memorabilia tip</strong> — Works best with one item per photo, or a small flat lay of related items. For programs and publications, photograph the <strong>cover clearly</strong> and include a second shot of the <strong>spine and back</strong> if condition matters. Include any signatures in frame. The AI assesses event significance, featured players, era, condition, and signatures.
+  </div>
+
+  <div class="coin-hint" id="glass-hint" style="display:none">
+    <strong>Glassware &amp; ceramics tip</strong> — Photograph each piece on a <strong>plain light background</strong> with good even lighting. Include shots showing the <strong>base/maker's mark</strong>, any chips or cracks, and pattern details. Multiple angles help — especially for 3D form pieces. The AI identifies maker, pattern, era, and condition including chips, crazing, and repairs.
+  </div>
+
+  <div class="coin-hint" id="elec-hint" style="display:none">
+    <strong>Electronics &amp; games tip</strong> — Include photos showing the <strong>model/serial number label</strong>, all ports and connectors, any cosmetic damage, and — for games — the <strong>cartridge/disc, box, and manual</strong> separately if you have them. Completeness (CIB = complete in box) dramatically affects value. The AI assesses model, era, working condition indicators, and completeness.
   </div>
 
   <div class="drop-zone" id="drop-zone"
@@ -234,9 +363,16 @@
 
   <div class="preview-grid" id="preview-grid"></div>
 
+  <div class="notes-wrap">
+    <div class="notes-label">
+      Additional details <span>Optional — anything the photos don't show</span>
+    </div>
+    <textarea class="notes-field" id="extra-notes" placeholder="e.g. 'Book has author signature on title page' · 'Coin has never been cleaned, stored in original mint sleeve' · 'Program from the game Hank Aaron hit his 714th HR' · 'First edition with misprint on p.47'"></textarea>
+  </div>
+
   <button class="analyze-btn" id="analyze-btn" disabled onclick="analyze()">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <span id="analyze-label">Analyze with Gemini</span>
+    <span id="analyze-label">Analyze</span>
   </button>
 
   <div id="error-area"></div>
@@ -245,40 +381,57 @@
 
 <script>
 var mode = 'books';
-var engine = 'gemini';
 var images = [];
 var lastResult = null;
 var keysVisible = true;
+var coinPairing = 'mirror'; // numbered | mirror | sequential | obverse
+var engineResults = {}; // stores results per engine
 
 // ── INIT ──────────────────────────────────────────────
 function init() {
   try {
     var gk = localStorage.getItem('rs_gemini_key');
     var ck = localStorage.getItem('rs_claude_key');
-    var eng = localStorage.getItem('rs_engine') || 'gemini';
+    var xk = localStorage.getItem('rs_grok_key');
     if (gk) document.getElementById('gemini-key').value = gk;
-    if (ck) document.getElementById('claude-key').value = ck;
-    document.getElementById('engine-select').value = eng;
-    setEngine(eng, true);
+    if (ck) { document.getElementById('claude-key').value = ck; document.getElementById('chk-claude').checked = true; }
+    if (xk) { document.getElementById('grok-key').value = xk; document.getElementById('chk-grok').checked = true; }
+    if (gk || ck || xk) {
+      keysVisible = false;
+      var rows = document.querySelectorAll('.key-row');
+      rows.forEach(function(r) { r.style.display = 'none'; });
+      document.getElementById('keys-toggle').textContent = 'Show keys';
+    }
   } catch(e) {}
   checkKeys();
+  updateEngineState();
 }
 
-// ── ENGINE ────────────────────────────────────────────
-function setEngine(e, silent) {
-  engine = e;
-  if (!silent) { try { localStorage.setItem('rs_engine', e); } catch(ex) {} }
-  var badge = document.getElementById('engine-badge');
-  var label = document.getElementById('analyze-label');
-  if (e === 'gemini') {
-    badge.textContent = 'Free'; badge.className = 'engine-badge gemini';
-    label.textContent = 'Analyze with Gemini';
-  } else {
-    badge.textContent = '~$0.05/run'; badge.className = 'engine-badge claude';
-    label.textContent = 'Analyze with Claude';
-  }
-  document.getElementById('gemini-key').classList.toggle('inactive', e !== 'gemini');
-  document.getElementById('claude-key').classList.toggle('inactive', e !== 'claude');
+// ── ENGINE STATE ──────────────────────────────────────
+function getSelectedEngines() {
+  var sel = [];
+  if (document.getElementById('chk-gemini').checked) sel.push('gemini');
+  if (document.getElementById('chk-claude').checked) sel.push('claude');
+  if (document.getElementById('chk-grok').checked) sel.push('grok');
+  return sel;
+}
+
+function updateEngineState() {
+  var gk = document.getElementById('gemini-key').value.trim();
+  var ck = document.getElementById('claude-key').value.trim();
+  var xk = document.getElementById('grok-key').value.trim();
+  // Dim checkboxes if no key for that engine
+  document.getElementById('chk-gemini-wrap').classList.toggle('disabled', gk.length < 10);
+  document.getElementById('chk-claude-wrap').classList.toggle('disabled', ck.length < 10);
+  document.getElementById('chk-grok-wrap').classList.toggle('disabled', xk.length < 10);
+  // Uncheck if no key
+  if (gk.length < 10) document.getElementById('chk-gemini').checked = false;
+  if (ck.length < 10) document.getElementById('chk-claude').checked = false;
+  if (xk.length < 10) document.getElementById('chk-grok').checked = false;
+  // Key field dimming
+  document.getElementById('gemini-key').classList.remove('inactive');
+  document.getElementById('claude-key').classList.remove('inactive');
+  document.getElementById('grok-key').classList.remove('inactive');
   updateBtn();
 }
 
@@ -286,14 +439,20 @@ function setEngine(e, silent) {
 function checkKeys() {
   var gk = document.getElementById('gemini-key').value.trim();
   var ck = document.getElementById('claude-key').value.trim();
-  var gv = gk.length > 20; // Gemini keys usually start with AIza but format can vary
+  var xk = document.getElementById('grok-key').value.trim();
+  var gv = gk.length > 20;
   var cv = ck.startsWith('sk-ant-') && ck.length > 20;
+  var xv = xk.startsWith('xai-') && xk.length > 10;
   document.getElementById('gemini-status').classList.toggle('ok', gv);
   document.getElementById('claude-status').classList.toggle('ok', cv);
+  document.getElementById('grok-status').classList.toggle('ok', xv);
   document.getElementById('gemini-saved').style.display = gv ? 'inline' : 'none';
   document.getElementById('claude-saved').style.display = cv ? 'inline' : 'none';
+  document.getElementById('grok-saved').style.display = xv ? 'inline' : 'none';
   if (gv) { try { localStorage.setItem('rs_gemini_key', gk); } catch(e) {} }
   if (cv) { try { localStorage.setItem('rs_claude_key', ck); } catch(e) {} }
+  if (xv) { try { localStorage.setItem('rs_grok_key', xk); } catch(e) {} }
+  updateEngineState();
   updateBtn();
 }
 
@@ -304,14 +463,17 @@ function toggleKeys() {
   document.getElementById('keys-toggle').textContent = keysVisible ? 'Hide keys' : 'Show keys';
 }
 
-function activeKey() {
-  return engine === 'gemini'
-    ? document.getElementById('gemini-key').value.trim()
-    : document.getElementById('claude-key').value.trim();
+function getKey(eng) {
+  if (eng === 'gemini') return document.getElementById('gemini-key').value.trim();
+  if (eng === 'claude') return document.getElementById('claude-key').value.trim();
+  return document.getElementById('grok-key').value.trim();
 }
 
 function updateBtn() {
-  document.getElementById('analyze-btn').disabled = images.length === 0 || activeKey().length < 10;
+  var sel = getSelectedEngines();
+  document.getElementById('analyze-btn').disabled = images.length === 0 || sel.length === 0;
+  var label = sel.length > 1 ? 'Compare ' + sel.length + ' engines' : sel.length === 1 ? 'Analyze with ' + sel[0].charAt(0).toUpperCase() + sel[0].slice(1) : 'Select an engine';
+  document.getElementById('analyze-label').textContent = label;
 }
 
 // ── ITEM MODE ─────────────────────────────────────────
@@ -320,13 +482,21 @@ function setMode(m) {
   document.getElementById('tab-books').classList.toggle('active', m === 'books');
   document.getElementById('tab-coins').classList.toggle('active', m === 'coins');
   document.getElementById('tab-memo').classList.toggle('active', m === 'memo');
+  document.getElementById('tab-glass').classList.toggle('active', m === 'glass');
+  document.getElementById('tab-elec').classList.toggle('active', m === 'elec');
   document.getElementById('coin-hint').style.display = m === 'coins' ? 'block' : 'none';
+  document.getElementById('pairing-panel').style.display = m === 'coins' ? 'block' : 'none';
   document.getElementById('memo-hint').style.display = m === 'memo' ? 'block' : 'none';
-  document.getElementById('upload-hint').textContent = m === 'coins'
-    ? 'Upload obverse + reverse grid photos'
-    : m === 'memo'
-    ? 'Cover photo + spine/back — one item or small flat lay'
-    : 'Shelf photos or individual book images';
+  document.getElementById('glass-hint').style.display = m === 'glass' ? 'block' : 'none';
+  document.getElementById('elec-hint').style.display = m === 'elec' ? 'block' : 'none';
+  var hints = { books: 'Shelf photos or individual book images', coins: 'Upload obverse + reverse grid photos', memo: 'Cover photo + spine/back — one item or small flat lay', glass: 'Multiple angles per piece — include base/maker mark', elec: 'Include model label, all accessories, box/manual if present' };
+  document.getElementById('upload-hint').textContent = hints[m] || 'JPG, PNG, WEBP — multiple files OK';
+}
+
+// ── COIN PAIRING ──────────────────────────────────────
+function setPairing(p) {
+  coinPairing = p;
+  document.getElementById('grid-cols-row').style.display = p === 'numbered' ? 'flex' : 'none';
 }
 
 // ── IMAGES ────────────────────────────────────────────
@@ -379,11 +549,23 @@ function imgSizeKB(src) { return Math.round(src.length * 0.75 / 1024); }
 
 function renderPreviews() {
   var coinLabels = ['Obverse', 'Reverse', 'Detail', 'Extra'];
+  function getCoinLabel(i) {
+    if (mode !== 'coins') return null;
+    if (coinPairing === 'numbered' || coinPairing === 'mirror') {
+      return i === 0 ? 'Obverse' : i === 1 ? 'Reverse' : 'Image ' + (i+1);
+    } else if (coinPairing === 'sequential') {
+      var coinNum = Math.floor(i / 2) + 1;
+      return 'Coin ' + coinNum + ' ' + (i % 2 === 0 ? 'Obv' : 'Rev');
+    } else {
+      return 'Coin ' + (i+1);
+    }
+  }
   document.getElementById('preview-grid').innerHTML = images.map(function(img, i) {
     var kb = imgSizeKB(img.src);
     var sizeLabel = kb > 1024 ? (kb/1024).toFixed(1) + 'MB' : kb + 'KB';
+    var coinLabel = getCoinLabel(i);
     return '<div class="preview-item"><img src="' + img.src + '" alt="">' +
-      (mode === 'coins' && coinLabels[i] ? '<span class="preview-label">' + coinLabels[i] + '</span>' : '<span class="preview-label">' + sizeLabel + '</span>') +
+      '<span class="preview-label">' + (coinLabel || sizeLabel) + '</span>' +
       '<button class="rm-btn" onclick="removeImg(' + i + ')">x</button></div>';
   }).join('');
   var totalKB = images.reduce(function(sum, img) { return sum + imgSizeKB(img.src); }, 0);
@@ -395,31 +577,139 @@ function renderPreviews() {
 }
 
 // ── PROMPTS ───────────────────────────────────────────
-var PROMPT_BOOKS = 'You are an expert used book buyer and reseller. Analyze the uploaded image(s) of books and identify every visible book.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0"},"items":[{"id":1,"title":"Title","author":"Author","condition":"Good","condition_notes":"notes","market_price":"$10","quick_price":"$7","time_to_sell_market":"2-4 weeks","time_to_sell_quick":"3-7 days","priority":"medium","platform_tip":"eBay","rationale":"reason"}]}';
+var PROMPT_BOOKS = 'You are an expert used book buyer and reseller. Analyze the uploaded image(s) of books and identify every visible book.\nFor each book provide three price points: market_price (what a patient private seller gets), quick_price (priced to sell within days), and dealer_price (what a used book dealer or buyback service would pay wholesale — typically 10-30% of market value).\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0"},"items":[{"id":1,"title":"Title","author":"Author","condition":"Good","condition_notes":"notes","market_price":"$10","quick_price":"$7","dealer_price":"$2","time_to_sell_market":"2-4 weeks","time_to_sell_quick":"3-7 days","priority":"medium","platform_tip":"eBay","rationale":"reason"}]}';
 
-var PROMPT_COINS = 'You are a professional numismatist. Analyze the uploaded image(s) of coins on a numbered grid. If two images: first=obverse (heads), second=reverse (tails). Match coins by grid number.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_coins":0,"total_market_value":"$0","highlight":"note"},"items":[{"id":"Grid #1","coin_name":"1921-D Morgan Silver Dollar","denomination":"Dollar","year":"1921","mint_mark":"D","sheldon_grade":"VF-30","grade_confidence":"medium","grade_notes":"notes","obverse_notes":"notes","reverse_notes":"notes","market_price":"$25","quick_price":"$18","time_to_sell_market":"1-3 weeks","time_to_sell_quick":"2-5 days","priority":"medium","rationale":"reason"}]}';
+function buildCoinPrompt() {
+  var cols = parseInt(document.getElementById('grid-cols') ? document.getElementById('grid-cols').value : '3') || 3;
+  var pairing = coinPairing;
 
-var PROMPT_MEMO = 'You are an expert sports memorabilia appraiser and reseller with deep knowledge of game programs, publications, tickets, scorecards, yearbooks, media guides, pennants, and paper ephemera from the 1900s to present. Analyze the uploaded image(s) and identify each item.\nFor each item assess: sport and team, event type (championship/playoff vs regular season), date/era, featured athletes or notable figures, any visible signatures, condition of cover/spine/interior, and scarcity.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0","highlight":"most notable item"},"items":[{"id":1,"item_type":"Game Program","title":"1967 World Series Program - Cardinals vs Red Sox","sport":"Baseball","teams":"St. Louis Cardinals vs Boston Red Sox","event_type":"World Series Game 1","date_era":"October 1967","featured_players":"Bob Gibson, Carl Yastrzemski","signatures":"None visible","condition":"Very Good","condition_notes":"Cover bright, minor spine wear, no writing","market_price":"$85","quick_price":"$55","time_to_sell_market":"2-6 weeks","time_to_sell_quick":"5-10 days","priority":"high","platform_tip":"eBay, Heritage Auctions","rationale":"World Series programs from the 1960s command strong premiums especially Cardinals-Red Sox rivalry"}]}';
+  // ── IDENTIFICATION RULES (highest priority) ──────────────────────────────
+  var identRules =
+    'STEP 1 — IDENTIFICATION (do this before grading or valuing):\n' +
+    'A. Examine the coin type, design, and denomination from the obverse.\n' +
+    'B. Read the date carefully — look for all four digits.\n' +
+    'C. MINT MARK — CRITICAL. Use this two-pass process:\n' +
+    '   PASS 1: Identify the coin type and denomination. Then locate the EXACT mint mark position for that coin:\n' +
+    '     Lincoln Wheat cents (1909-1958): reverse, lower-left between wheat stalks\n' +
+    '     Lincoln Memorial cents (1959-1967): obverse, below date\n' +
+    '     Jefferson nickels (pre-1968): reverse, right of Monticello dome\n' +
+    '     Jefferson nickels (1968+): obverse, above date\n' +
+    '     Buffalo nickels: reverse, below FIVE CENTS\n' +
+    '     Mercury/Roosevelt dimes: reverse, lower-left base of torch\n' +
+    '     Washington quarters (pre-1968): reverse, below eagle\n' +
+    '     Walking Liberty half: obverse, lower-left near date OR reverse lower-left (varies by year)\n' +
+    '     Franklin half: reverse, above bell\n' +
+    '     Morgan dollar: reverse, above DO in DOLLAR\n' +
+    '     Peace dollar: reverse, left of eagle tail feathers\n' +
+    '   PASS 2: Zoom your analysis into ONLY that specific location. Describe what letter shape you see.\n' +
+    '     D = angular letter with straight back and curved right side\n' +
+    '     S = curved double-curve letter\n' +
+    '     O = oval or round letter\n' +
+    '     CC = two C shapes side by side\n' +
+    '   Record your raw observation in mint_mark_raw (e.g. "angular D-shaped letter clearly visible").\n' +
+    '   Then set mint_mark to the letter you observed: D, S, O, CC, W, or P.\n' +
+    '   If no letter is present after careful examination, set mint_mark to "None (Philadelphia)".\n' +
+    '   If genuinely unclear, set to "Uncertain" — NEVER guess Philadelphia by default.\n' +
+    'D. SPECIAL TOKENS & NON-STANDARD COINS:\n' +
+    '   - OPA (Office of Price Administration) ration tokens from WWII: These are small cardboard/fiber tokens, NOT metal coins.\n' +
+    '     Red point tokens are identified by a TWO-LETTER code (e.g. "GH", "TK", "BV") — never a single letter.\n' +
+    '     Blue point tokens also use two-letter codes.\n' +
+    '     Do not apply Sheldon grades to OPA tokens — use condition terms: Excellent, Very Good, Good, Fair, Poor.\n' +
+    '   - Trade tokens, transportation tokens, and store cards: identify issuer, location, and era.\n' +
+    '   - Foreign coins: identify country, denomination, and era before grading.\n\n';
+
+  // ── GRADING RULES ────────────────────────────────────────────────────────
+  var gradingRules =
+    'STEP 2 — GRADING (Sheldon scale for standard coins):\n' +
+    'Evaluate in this order: (1) surface preservation / wear on high points, (2) luster, (3) strike quality, (4) eye appeal.\n' +
+    'Key grade checkpoints:\n' +
+    '  MS-60 to MS-70: No wear. Differentiate by contact marks and luster.\n' +
+    '  AU-50 to AU-58: Slight wear on highest points only. Much original luster remains.\n' +
+    '  EF-40 to EF-45: Light wear on high points. Major design details sharp.\n' +
+    '  VF-20 to VF-35: Moderate wear. Main features clear but flat.\n' +
+    '  F-12 to F-15: Even moderate-heavy wear. Lettering and date clear.\n' +
+    '  VG-8 to VG-10: Well worn. Main features clear but flat.\n' +
+    '  G-4 to G-6: Heavily worn. Design visible but faint in spots.\n' +
+    '  AG-3 and below: Very heavily worn.\n' +
+    'Note any cleaning, artificial toning, scratches, or environmental damage — these reduce grade and value significantly.\n\n';
+
+  // ── PAIRING INSTRUCTIONS ─────────────────────────────────────────────────
+  var pairingInstr = '';
+  if (pairing === 'numbered') {
+    pairingInstr =
+      'IMAGE PAIRING: Coins are in a numbered grid. First image = OBVERSE, second = REVERSE. ' +
+      'Grid has ' + cols + ' columns. Physical flip mirrors positions horizontally: ' +
+      'column 1 obverse = column ' + cols + ' reverse. ' +
+      'Use visible grid numbers as the authoritative match. Label each coin "Grid #1", "Grid #2" etc.';
+  } else if (pairing === 'mirror') {
+    pairingInstr =
+      'IMAGE PAIRING: Unnumbered grid, physically flipped. First image = OBVERSE, second = REVERSE. ' +
+      'The flip creates a HORIZONTAL MIRROR: leftmost obverse coin = rightmost reverse coin in each row. ' +
+      'Apply this mirror logic row by row. Label coins "Position #1", "Position #2" etc. (left-to-right, top-to-bottom on obverse).';
+  } else if (pairing === 'sequential') {
+    pairingInstr =
+      'IMAGE PAIRING: Sequential pairs. Image 1 = obverse of coin 1, image 2 = reverse of coin 1, ' +
+      'image 3 = obverse of coin 2, etc. Odd number of images = last coin has obverse only. Label "Coin #1", "Coin #2" etc.';
+  } else {
+    pairingInstr =
+      'IMAGE PAIRING: Obverse only. Grade from front face alone. Note this limitation in grade_notes. Label "Coin #1", "Coin #2" etc.';
+  }
+
+  var base =
+    'You are a senior professional numismatist with 30+ years grading U.S. and world coins, tokens, and medals. ' +
+    'You have encyclopedic knowledge of key dates, mint marks, error coins, and specialty items including WWII ration tokens.\n\n' +
+    identRules +
+    gradingRules +
+    pairingInstr + '\n\n' +
+    'CRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\n' +
+    'Provide three price points: market_price (patient private seller), quick_price (priced to sell fast), ' +
+    'dealer_price (what a coin dealer would pay wholesale — typically 40-60% of market for common coins, higher for key dates).\n' +
+    'Format: {"summary":{"total_coins":0,"total_market_value":"$0","highlight":"note"},"items":[' +
+    '{"id":"Grid #1","coin_name":"1921-D Morgan Silver Dollar","denomination":"Dollar","year":"1921",' +
+    '"mint_mark":"D","sheldon_grade":"VF-30","grade_confidence":"medium",' +
+    '"grade_notes":"Moderate wear on hair above ear and eagle breast. No cleaning. Luster in protected areas.",' +
+    '"obverse_notes":"Date clear. Mint mark D confirmed at reverse. Liberty portrait shows even wear.",' +
+    '"reverse_notes":"Eagle breast and wing tips show wear consistent with VF. Mint mark clearly D.",' +
+    '"market_price":"$35","quick_price":"$25","dealer_price":"$16",' +
+    '"time_to_sell_market":"1-3 weeks","time_to_sell_quick":"3-7 days","priority":"medium",' +
+    '"rationale":"Common date Morgan in VF, solid type coin"}]}';
+
+  return base;
+}
+
+var PROMPT_MEMO = 'You are an expert sports memorabilia appraiser and reseller with deep knowledge of game programs, publications, tickets, scorecards, yearbooks, media guides, pennants, and paper ephemera from the 1900s to present. Analyze the uploaded image(s) and identify each item.\nFor each item assess: sport and team, event type (championship/playoff vs regular season), date/era, featured athletes or notable figures, any visible signatures, condition of cover/spine/interior, and scarcity.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0","highlight":"most notable item"},"items":[{"id":1,"item_type":"Game Program","title":"1967 World Series Program - Cardinals vs Red Sox","sport":"Baseball","teams":"St. Louis Cardinals vs Boston Red Sox","event_type":"World Series Game 1","date_era":"October 1967","featured_players":"Bob Gibson, Carl Yastrzemski","signatures":"None visible","condition":"Very Good","condition_notes":"Cover bright, minor spine wear, no writing","market_price":"$85","quick_price":"$55","dealer_price":"$30","time_to_sell_market":"2-6 weeks","time_to_sell_quick":"5-10 days","priority":"high","platform_tip":"eBay, Heritage Auctions","rationale":"World Series programs from the 1960s command strong premiums especially Cardinals-Red Sox rivalry"}]}'
+  + ' For each item provide three price points: market_price (patient private seller), quick_price (priced to sell within days), dealer_price (what a sports memorabilia dealer would pay wholesale — typically 30-50% of market value).';
+
+var PROMPT_GLASS = 'You are an expert antiques appraiser and reseller specializing in glassware, ceramics, pottery, porcelain, and decorative arts. Analyze the uploaded image(s) and identify each piece.\nFor each piece assess: maker or manufacturer, pattern name, production era/date range, form (e.g. vase, bowl, plate, figurine), color and decoration technique, any visible maker marks or signatures, condition including chips/cracks/crazing/repairs/fading, and rarity.\nFor condition use standard terms: Mint, Excellent, Very Good, Good, Fair, Poor.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nProvide three price points: market_price (patient private seller), quick_price (priced to sell fast), dealer_price (what an antique dealer would pay wholesale — typically 30-50% of market).\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0","highlight":"most notable piece"},"items":[{"id":1,"item_type":"Vase","maker":"Rookwood Pottery","pattern":"Standard Glaze","form":"Vase","era":"1890-1910","color_decoration":"Brown to orange standard glaze with floral motif","makers_mark":"Rookwood flame mark with Roman numeral date","condition":"Very Good","condition_notes":"No chips or cracks, minor scratching to glaze","market_price":"$280","quick_price":"$190","dealer_price":"$110","time_to_sell_market":"3-8 weeks","time_to_sell_quick":"1-2 weeks","priority":"high","platform_tip":"eBay, Replacements.com, Ruby Lane","rationale":"Rookwood standard glaze pieces with clear flame marks are consistently sought by collectors"}]}';
+
+var PROMPT_ELEC = 'You are an expert consumer electronics and video game reseller with deep knowledge of vintage and modern electronics, gaming consoles, cartridges, handhelds, computers, audio equipment, and related accessories. Analyze the uploaded image(s) and identify each item.\nFor each item assess: brand, model, approximate production year or era, condition of housing/screen/ports, visible damage or modifications, completeness (for games: cart/disc only, with box, complete in box CIB, sealed), and any accessories visible.\nFor games completeness use: Cart/Disc Only | With Box | Complete in Box (CIB) | Sealed.\nCRITICAL: Respond with ONE valid JSON object only. No markdown. No code fences. No text before or after. Start with { end with }. Double quotes only. No trailing commas.\nProvide three price points: market_price (patient private seller), quick_price (priced to sell fast), dealer_price (what a used game/electronics shop would pay — typically 40-60% of market for common items, less for slow movers).\nFormat: {"summary":{"total_items":0,"worth_listing":0,"total_market_value":"$0-$0","highlight":"most valuable item"},"items":[{"id":1,"item_type":"Video Game","brand":"Nintendo","model":"The Legend of Zelda","platform":"NES","year_era":"1987","completeness":"Cart Only","condition":"Good","condition_notes":"Label intact, minor edge wear on cart, no writing","market_price":"$25","quick_price":"$18","dealer_price":"$10","time_to_sell_market":"1-3 weeks","time_to_sell_quick":"3-7 days","priority":"medium","platform_tip":"eBay, DKOldies, Facebook Marketplace","rationale":"Common NES title, cart-only copies sell steadily but competitively"}]}';
+
 
 // ── JSON REPAIR ───────────────────────────────────────
 function extractJSON(raw) {
+  // Step 1: strip markdown fences and leading/trailing whitespace
   var text = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  // Step 2: strip any prose before the first { and after the last }
   var start = text.indexOf('{'), end = text.lastIndexOf('}');
-  if (start === -1 || end === -1) throw new Error('No JSON found in response.');
+  if (start === -1 || end === -1) throw new Error('No JSON object found in response. Please try again.');
   text = text.slice(start, end + 1);
+  // Step 3: direct parse
   try { return JSON.parse(text); } catch(e) {}
+  // Step 4: common fixes
   text = text
-    .replace(/,\s*([}\]])/g, '$1')
-    .replace(/:\s*None\b/g, ': null')
-    .replace(/:\s*True\b/g, ': true')
-    .replace(/:\s*False\b/g, ': false');
+    .replace(/,\s*([}\]])/g, '$1')           // trailing commas
+    .replace(/:\s*None\b/g, ': null')         // Python None
+    .replace(/:\s*True\b/g, ': true')         // Python True
+    .replace(/:\s*False\b/g, ': false')       // Python False
+    .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":'); // unquoted keys
   try { return JSON.parse(text); } catch(e) {}
-  var itemsMatch = text.match(/"items"\s*:\s*\[[\s\S]*\]/);
-  var summaryMatch = text.match(/"summary"\s*:\s*\{[^}]*\}/);
+  // Step 5: try to salvage items array even if outer structure is broken
+  var itemsMatch = text.match(/"items"\s*:\s*\[[\s\S]*?\](?=\s*[,}])/);
+  var summaryMatch = text.match(/"summary"\s*:\s*\{[^{}]*\}/);
   if (itemsMatch) {
     try { return JSON.parse('{' + (summaryMatch ? summaryMatch[0] + ',' : '') + itemsMatch[0] + '}'); } catch(e) {}
   }
-  throw new Error('Could not parse AI response. Please try again.');
+  throw new Error('Could not parse AI response. Please try again — Gemini sometimes returns malformed output.');
 }
 
 // ── GEMINI CASCADE ────────────────────────────────────
@@ -433,7 +723,11 @@ async function callGemini(apiKey, parts, model) {
   var resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model.id + ':generateContent?key=' + apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: parts }], generationConfig: { temperature: 0.2, maxOutputTokens: 4096, responseMimeType: "application/json" } })
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: 'You are an expert appraiser AI. You MUST respond with valid JSON only. Absolutely no markdown formatting, no code fences, no explanatory text before or after. Your entire response must be a single JSON object starting with { and ending with }.' }] },
+      contents: [{ parts: parts }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 8192 }
+    })
   });
   if (!resp.ok) {
     var err = await resp.json().catch(function() { return {}; });
@@ -449,7 +743,10 @@ async function callGemini(apiKey, parts, model) {
   }
   var candidate = data.candidates[0];
   // Check finish reason - RECITATION/SAFETY means blocked
-  if (candidate.finishReason && candidate.finishReason !== 'STOP' && candidate.finishReason !== 'MAX_TOKENS') {
+  if (candidate.finishReason === 'MAX_TOKENS') {
+    // Response was cut off — try to parse what we got, it may still be usable
+    console.warn('Gemini response truncated at max tokens — attempting partial parse');
+  } else if (candidate.finishReason && candidate.finishReason !== 'STOP') {
     throw new Error('__RETRY__Response stopped early (' + candidate.finishReason + '). Try again.');
   }
   var raw = (candidate.content && candidate.content.parts && candidate.content.parts[0] && candidate.content.parts[0].text) || '';
@@ -506,32 +803,132 @@ async function runClaude(apiKey, prompt) {
   return raw;
 }
 
+
+// ── GROK ─────────────────────────────────────────────
+async function runGrok(apiKey, prompt) {
+  setStatus('Analyzing with Grok...', 'This may take 15-25 seconds');
+
+  // Build messages: Grok vision uses OpenAI-compatible format
+  // Images must be passed as base64 data URIs in image_url objects
+  // Text prompt goes FIRST (before images) for best instruction following
+  var userContent = [{ type: 'text', text: prompt }];
+  images.forEach(function(img) {
+    var base64 = img.src.split(',')[1];
+    var mimeType = img.type || 'image/jpeg';
+    // Ensure we only send supported formats
+    if (mimeType !== 'image/jpeg' && mimeType !== 'image/png' && mimeType !== 'image/webp') {
+      mimeType = 'image/jpeg';
+    }
+    userContent.push({
+      type: 'image_url',
+      image_url: { url: 'data:' + mimeType + ';base64,' + base64, detail: 'high' }
+    });
+  });
+
+  var requestBody = {
+    model: 'grok-4.20',
+    messages: [
+      { role: 'system', content: 'You are an expert appraiser. Always respond with valid JSON only. No markdown. No explanation. Start with { end with }.' },
+      { role: 'user', content: userContent }
+    ],
+    max_tokens: 4000,
+    temperature: 0.1
+  };
+
+  var resp;
+  var respText;
+  try {
+    resp = await fetch('https://api.x.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify(requestBody)
+    });
+  } catch(fetchErr) {
+    throw new Error(
+      'Grok request failed — likely a CORS block. ' +
+      'This works on GitHub Pages but not from a local file. ' +
+      'Error: ' + fetchErr.message
+    );
+  }
+
+  respText = await resp.text();
+  if (!resp.ok) {
+    var errBody = {};
+    try { errBody = JSON.parse(respText); } catch(e) {}
+    var msg = (errBody.error && errBody.error.message) || ('HTTP ' + resp.status);
+    if (resp.status === 401) throw new Error('Invalid Grok API key — check console.x.ai. Detail: ' + msg);
+    if (resp.status === 429) throw new Error('Grok rate limit hit. Wait a moment and try again.');
+    // Show full response for any other error so we can diagnose
+    throw new Error('Grok ' + resp.status + ': ' + msg + ' | Response: ' + respText.substring(0, 400));
+  }
+
+  var data = {};
+  try { data = JSON.parse(respText); } catch(e) {
+    throw new Error('Grok returned non-JSON: ' + respText.substring(0, 300));
+  }
+  var raw = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+  if (!raw) throw new Error('Grok returned no content. Full response: ' + respText.substring(0, 300));
+  return raw;
+}
+
 // ── ANALYZE ───────────────────────────────────────────
+async function runEngine(eng, prompt) {
+  var key = getKey(eng);
+  if (!key) throw new Error('No API key for ' + eng);
+  if (eng === 'gemini') {
+    var res = await runGemini(key, prompt);
+    return { raw: res.raw, label: res.model.label, cls: res.model.tier };
+  } else if (eng === 'claude') {
+    var raw = await runClaude(key, prompt);
+    return { raw: raw, label: 'Claude Sonnet', cls: 'claude-banner' };
+  } else {
+    var raw = await runGrok(key, prompt);
+    return { raw: raw, label: 'Grok 4', cls: 'fallback' };
+  }
+}
+
 async function analyze() {
-  var key = activeKey();
-  if (!key) { showError('Please enter your ' + (engine === 'gemini' ? 'Gemini' : 'Claude') + ' API key above.'); return; }
+  var selected = getSelectedEngines();
+  if (selected.length === 0) { showError('Please check at least one engine above.'); return; }
+
   document.getElementById('error-area').innerHTML = '';
   document.getElementById('results-area').innerHTML = '';
   document.getElementById('analyze-btn').disabled = true;
-  var prompt = (mode === 'books' ? PROMPT_BOOKS : mode === 'coins' ? PROMPT_COINS : PROMPT_MEMO) + '\n\nAnalyze all items and return the JSON.';
-  try {
-    var raw, bannerInfo;
-    if (engine === 'gemini') {
-      var res = await runGemini(key, prompt);
-      raw = res.raw;
-      bannerInfo = { cls: res.model.tier, note: res.model.note };
-    } else {
-      raw = await runClaude(key, prompt);
-      bannerInfo = { cls: 'claude-banner', note: 'Analyzed with <strong>Claude Sonnet</strong> — highest accuracy for book spine reading, coin grading, and memorabilia appraisal.' };
-    }
-    renderResults(extractJSON(raw), bannerInfo);
-  } catch(err) {
-    document.getElementById('results-area').innerHTML = '';
-    showError('Analysis failed: ' + err.message);
-  } finally {
-    document.getElementById('analyze-btn').disabled = false;
-    updateBtn();
+
+  var extraNotes = document.getElementById('extra-notes').value.trim();
+  var prompt = mode === 'books' ? PROMPT_BOOKS : mode === 'coins' ? buildCoinPrompt() : mode === 'memo' ? PROMPT_MEMO : mode === 'glass' ? PROMPT_GLASS : PROMPT_ELEC;
+  prompt += '\n\nAnalyze all items and return the JSON. IMPORTANT: Your response must begin with { and end with } with no other text.';
+  if (extraNotes) {
+    prompt += '\n\nADDITIONAL DETAILS FROM THE SELLER (treat as authoritative):\n' + extraNotes;
   }
+
+  engineResults = {};
+  renderCompareShell(selected);
+
+  // Run all selected engines in parallel using Promise.all
+  var tasks = selected.map(function(eng) {
+    return runEngine(eng, prompt)
+      .then(function(res) {
+        try {
+          engineResults[eng] = { result: extractJSON(res.raw), label: res.label, cls: res.cls, error: null };
+        } catch(e) {
+          engineResults[eng] = { result: null, label: res.label || eng, cls: 'fallback', error: 'Parse failed: ' + e.message };
+        }
+      })
+      .catch(function(e) {
+        engineResults[eng] = { result: null, label: eng.charAt(0).toUpperCase()+eng.slice(1), cls: 'fallback', error: e.message };
+      })
+      .then(function() {
+        updateCompareColumn(eng, selected);
+      });
+  });
+
+  await Promise.all(tasks);
+  document.getElementById('analyze-btn').disabled = false;
+  updateBtn();
 }
 
 function setStatus(msg, sub) {
@@ -583,6 +980,8 @@ function cBadge(c) {
 function buildCards(items, currentMode) {
   var isCoins = currentMode === 'coins';
   var isMemo = currentMode === 'memo';
+  var isGlass = currentMode === 'glass';
+  var isElec = currentMode === 'elec';
   return items.map(function(item, idx) {
     var pc = item.priority === 'high' ? 'high' : item.priority === 'medium' ? 'medium' : 'skip';
     if (isMemo) {
@@ -606,7 +1005,8 @@ function buildCards(items, currentMode) {
       return '<div class="item-card ' + pc + '">' +
         '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
         '<div class="card-title">' + (item.id || '') + ' \u2014 ' + (item.coin_name || 'Unknown coin') + '</div>' +
-        '<div class="card-sub">' + (item.year || '') + (item.mint_mark && item.mint_mark !== 'None' && item.mint_mark !== 'none' ? ' \u00b7 ' + item.mint_mark + ' mint' : '') + (item.denomination ? ' \u00b7 ' + item.denomination : '') + '</div>' +
+        '<div class="card-sub">' + (item.year || '') + (item.mint_mark ? ' \u00b7 ' + item.mint_mark + ' mint' : '') + (item.denomination ? ' \u00b7 ' + item.denomination : '') + '</div>' +
+        (item.mint_mark_raw ? '<div style="font-size:11px;color:var(--ink-light);font-family:DM Mono,monospace;margin-bottom:6px;padding:3px 8px;background:var(--cream);border-radius:3px;display:inline-block">Mint mark observed: ' + item.mint_mark_raw + '</div>' : '') +
         '<div class="badges">' + pBadge(item.priority) + ' ' + cBadge(item.grade_confidence) + '</div></div></div>' +
         '<div class="sheldon-display"><div class="sheldon-grade-big">' + (item.sheldon_grade || '?') + '</div>' +
         '<div class="sheldon-bar-wrap"><div class="sheldon-bar-label"><span>Poor</span><span>Fine</span><span>MS-70</span></div>' +
@@ -615,6 +1015,39 @@ function buildCards(items, currentMode) {
         '<div class="prices">' +
         '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
         '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '\u2014') + '</div><div class="price-time">\u223c' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '<div class="price-box dealer"><div class="price-box-label">Dealer buys at</div><div class="price-val">' + (item.dealer_price || '\u2014') + '</div><div class="price-time">Wholesale offer</div></div>' +
+        '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
+    } else if (isGlass) {
+      return '<div class="item-card ' + pc + '">' +
+        '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
+        '<div class="card-title">' + (item.maker || '') + (item.pattern ? ' · ' + item.pattern : '') + '</div>' +
+        '<div class="card-sub">' + [item.form, item.era].filter(Boolean).join(' · ') + '</div>' +
+        '<div class="badges">' + pBadge(item.priority) +
+        (item.condition ? ' <span class="badge badge-blue">' + item.condition + '</span>' : '') +
+        (item.platform_tip ? ' <span class="platform-tip">' + item.platform_tip + '</span>' : '') +
+        '</div></div></div>' +
+        (item.makers_mark && item.makers_mark !== 'None' && item.makers_mark !== 'none' ? '<div class="condition-note"><strong>Maker mark:</strong> ' + item.makers_mark + '</div>' : '') +
+        (item.condition_notes ? '<div class="condition-note"><strong>Condition:</strong> ' + item.condition_notes + '</div>' : '') +
+        '<div class="prices">' +
+        '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
+        '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '<div class="price-box dealer"><div class="price-box-label">Dealer buys at</div><div class="price-val">' + (item.dealer_price || '—') + '</div><div class="price-time">Wholesale offer</div></div>' +
+        '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
+    } else if (isElec) {
+      return '<div class="item-card ' + pc + '">' +
+        '<div class="card-top"><div class="card-num">' + (idx+1) + '</div><div class="card-info">' +
+        '<div class="card-title">' + [item.brand, item.model].filter(Boolean).join(' ') + '</div>' +
+        '<div class="card-sub">' + [item.platform, item.year_era].filter(Boolean).join(' · ') + '</div>' +
+        '<div class="badges">' + pBadge(item.priority) +
+        (item.condition ? ' <span class="badge badge-blue">' + item.condition + '</span>' : '') +
+        (item.completeness && item.completeness !== 'Cart Only' && item.completeness !== 'Disc Only' ? ' <span class="badge badge-green">' + item.completeness + '</span>' : '') +
+        (item.platform_tip ? ' <span class="platform-tip">' + item.platform_tip + '</span>' : '') +
+        '</div></div></div>' +
+        (item.condition_notes ? '<div class="condition-note"><strong>Condition:</strong> ' + item.condition_notes + '</div>' : '') +
+        '<div class="prices">' +
+        '<div class="price-box"><div class="price-box-label">Market price</div><div class="price-val">' + (item.market_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_market || '?') + ' to sell</div></div>' +
+        '<div class="price-box quick"><div class="price-box-label">Quick-turn</div><div class="price-val">' + (item.quick_price || '—') + '</div><div class="price-time">∼' + (item.time_to_sell_quick || '?') + ' to sell</div></div>' +
+        '<div class="price-box dealer"><div class="price-box-label">Dealer buys at</div><div class="price-val">' + (item.dealer_price || '—') + '</div><div class="price-time">Wholesale offer</div></div>' +
         '</div><div class="rationale">' + (item.rationale || '') + '</div></div>';
     } else {
       // books
@@ -632,18 +1065,242 @@ function buildCards(items, currentMode) {
   }).join('');
 }
 
+// ── COMPARISON RENDERING ─────────────────────────────
+function engineColor(eng) {
+  return eng === 'gemini' ? '#4285F4' : eng === 'claude' ? '#6B46C1' : '#111';
+}
+
+function renderCompareShell(selected) {
+  if (selected.length === 1) {
+    // Single engine — show loading spinner
+    document.getElementById('results-area').innerHTML =
+      '<div class="loading"><div class="spin"></div><p>Analyzing with ' + selected[0] + '...</p></div>';
+    return;
+  }
+  // Multi-engine — show side-by-side skeleton
+  var cols = selected.map(function(eng) {
+    return '<th class="engine-col" style="border-left:3px solid ' + engineColor(eng) + '">' +
+      eng.charAt(0).toUpperCase() + eng.slice(1) + ' <span class="loading-cell">analyzing...</span></th>';
+  }).join('');
+  document.getElementById('results-area').innerHTML =
+    '<div class="compare-banner">Running ' + selected.length + ' engines in parallel — results appear as each finishes.</div>' +
+    '<div class="compare-table-wrap"><table class="compare-table" id="compare-tbl">' +
+    '<thead><tr><th>Item / Field</th>' + cols + '</tr></thead>' +
+    '<tbody id="compare-body"><tr><td colspan="' + (selected.length+1) + '" style="text-align:center;padding:2rem;color:var(--ink-light)">Waiting for results...</td></tr></tbody>' +
+    '</table></div>';
+}
+
+function updateCompareColumn(eng, selected) {
+  if (selected.length === 1) {
+    // Single engine — render normally
+    var er = engineResults[eng];
+    if (er && er.result) {
+      renderResults(er.result, { cls: er.cls, note: 'Analyzed with <strong>' + er.label + '</strong>' });
+    } else {
+      showError('Analysis failed: ' + (er ? er.error : 'Unknown error'));
+    }
+    return;
+  }
+  // Check if all engines done
+  var allDone = selected.every(function(e) { return engineResults[e] !== undefined; });
+  if (allDone) renderCompareTable(selected);
+}
+
+function renderCompareTable(selected) {
+  // Gather all items across engines — use the engine with most items as reference
+  var refEng = selected.reduce(function(best, eng) {
+    var n = (engineResults[eng] && engineResults[eng].result && engineResults[eng].result.items) ? engineResults[eng].result.items.length : 0;
+    var bn = (engineResults[best] && engineResults[best].result && engineResults[best].result.items) ? engineResults[best].result.items.length : 0;
+    return n > bn ? eng : best;
+  }, selected[0]);
+
+  var refItems = (engineResults[refEng] && engineResults[refEng].result && engineResults[refEng].result.items) || [];
+  var isCoins = mode === 'coins';
+  var isElec = mode === 'elec';
+  var isGlass = mode === 'glass';
+
+  // Header row
+  var headerCols = selected.map(function(eng) {
+    var er = engineResults[eng];
+    var label = er ? er.label : eng;
+    return '<th class="engine-col" style="border-left:3px solid ' + engineColor(eng) + '">' + label + '</th>';
+  }).join('');
+
+  var rows = '';
+
+  // Summary row
+  rows += '<tr class="section-header"><td colspan="' + (selected.length+1) + '">Summary</td></tr>';
+  rows += '<tr><td class="item-label">Total found</td>' + selected.map(function(eng) {
+    var er = engineResults[eng];
+    if (er && er.error) return '<td class="engine-cell err-cell">' + er.error.substring(0,80) + '</td>';
+    if (!er || !er.result) return '<td class="engine-cell loading-cell">pending...</td>';
+    var s = er.result.summary || {};
+    return '<td class="engine-cell"><span class="cell-val">' + (s.total_items || s.total_coins || s.total_items || (er.result.items||[]).length) + '</span></td>';
+  }).join('') + '</tr>';
+
+  rows += '<tr><td class="item-label">Est. total value</td>' + selected.map(function(eng) {
+    var er = engineResults[eng];
+    if (!er || !er.result) return '<td class="engine-cell">—</td>';
+    var s = er.result.summary || {};
+    return '<td class="engine-cell"><span class="cell-price">' + (s.total_market_value || '—') + '</span></td>';
+  }).join('') + '</tr>';
+
+  if (isCoins) {
+    rows += '<tr><td class="item-label">Highlight</td>' + selected.map(function(eng) {
+      var er = engineResults[eng];
+      if (!er || !er.result) return '<td class="engine-cell">—</td>';
+      var s = er.result.summary || {};
+      return '<td class="engine-cell"><span class="cell-note">' + (s.highlight || '—') + '</span></td>';
+    }).join('') + '</tr>';
+  }
+
+  // Per-item rows
+  refItems.forEach(function(refItem, idx) {
+    var itemId = refItem.id || refItem.title || refItem.coin_name || ('Item ' + (idx+1));
+    rows += '<tr class="section-header"><td colspan="' + (selected.length+1) + '">' + itemId + '</td></tr>';
+
+    // Name/title row
+    var nameField = isCoins ? 'coin_name' : isGlass ? 'maker' : isElec ? 'model' : 'title';
+    var subField = isCoins ? 'denomination' : isGlass ? 'pattern' : isElec ? 'platform' : 'author';
+    rows += '<tr><td class="item-label">Identified as</td>' + selected.map(function(eng) {
+      var er = engineResults[eng];
+      if (!er || !er.result) return '<td class="engine-cell loading-cell">pending...</td>';
+      var item = (er.result.items || [])[idx] || {};
+      var name = item[nameField] || item.title || item.coin_name || item.maker || item.model || '—';
+      var sub = item[subField] || '';
+      return '<td class="engine-cell"><span class="cell-val">' + name + '</span>' + (sub ? '<div class="cell-note">' + sub + '</div>' : '') + '</td>';
+    }).join('') + '</tr>';
+
+    // Coin-specific: year + mint mark
+    if (isCoins) {
+      rows += '<tr><td class="item-label">Year</td>' + selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        return '<td class="engine-cell"><span class="cell-val">' + (item.year || '—') + '</span></td>';
+      }).join('') + '</tr>';
+
+      // Mint mark — highlight disagreements
+      var mintMarks = selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '?';
+        return ((er.result.items||[])[idx]||{}).mint_mark || '?';
+      });
+      var mintAgree = mintMarks.every(function(m) { return m === mintMarks[0]; });
+      rows += '<tr><td class="item-label">Mint mark</td>' + selected.map(function(eng, ei) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        var mm = item.mint_mark || '—';
+        var raw = item.mint_mark_raw ? '<div class="cell-note">' + item.mint_mark_raw + '</div>' : '';
+        var flag = !mintAgree ? '<div class="diff-flag">⚠ Engines disagree</div>' : '';
+        return '<td class="engine-cell"><span class="cell-grade" style="color:' + (mintAgree?'inherit':'var(--red)') + '">' + mm + '</span>' + raw + flag + '</td>';
+      }).join('') + '</tr>';
+
+      // Sheldon grade — highlight disagreements
+      var grades = selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '?';
+        return ((er.result.items||[])[idx]||{}).sheldon_grade || '?';
+      });
+      var gradeAgree = grades.every(function(g) { return g === grades[0]; });
+      rows += '<tr><td class="item-label">Sheldon grade</td>' + selected.map(function(eng, ei) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        var grade = item.sheldon_grade || '—';
+        var conf = item.grade_confidence ? '<div class="cell-note">Confidence: ' + item.grade_confidence + '</div>' : '';
+        var pct = sheldonPct(grade);
+        var bar = '<div class="grade-bar" style="width:' + pct + '%;background:' + (pct>=70?'#2D6A4F':pct>=45?'#B8860B':'#8A837A') + '"></div>';
+        var flag = !gradeAgree ? '<div class="diff-flag">⚠ Engines disagree</div>' : '';
+        return '<td class="engine-cell"><span class="cell-grade">' + grade + '</span>' + bar + conf + flag + '</td>';
+      }).join('') + '</tr>';
+
+      rows += '<tr><td class="item-label">Grade notes</td>' + selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        return '<td class="engine-cell"><span class="cell-note">' + (item.grade_notes || '—') + '</span></td>';
+      }).join('') + '</tr>';
+    }
+
+    // Condition (non-coin)
+    if (!isCoins) {
+      var conds = selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '?';
+        return ((er.result.items||[])[idx]||{}).condition || '?';
+      });
+      var condAgree = conds.every(function(c) { return c === conds[0]; });
+      rows += '<tr><td class="item-label">Condition</td>' + selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        var flag = !condAgree ? '<div class="diff-flag">⚠ Engines disagree</div>' : '';
+        return '<td class="engine-cell"><span class="cell-val" style="color:' + (condAgree?'inherit':'var(--red)') + '">' + (item.condition||'—') + '</span>' + flag + '</td>';
+      }).join('') + '</tr>';
+
+      rows += '<tr><td class="item-label">Condition notes</td>' + selected.map(function(eng) {
+        var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+        var item = (er.result.items || [])[idx] || {};
+        return '<td class="engine-cell"><span class="cell-note">' + (item.condition_notes || '—') + '</span></td>';
+      }).join('') + '</tr>';
+    }
+
+    // Prices — always shown
+    var mktPrices = selected.map(function(eng) {
+      var er = engineResults[eng]; if (!er || !er.result) return 0;
+      return parsePrice(((er.result.items||[])[idx]||{}).market_price);
+    });
+    var maxMkt = Math.max.apply(null, mktPrices);
+    var minMkt = Math.min.apply(null, mktPrices.filter(function(p){return p>0;}));
+    var priceDiverge = maxMkt > 0 && minMkt > 0 && (maxMkt / minMkt) > 2;
+
+    rows += '<tr><td class="item-label">Market price</td>' + selected.map(function(eng) {
+      var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+      var item = (er.result.items || [])[idx] || {};
+      var flag = priceDiverge ? '<div class="diff-flag">⚠ Wide range</div>' : '';
+      return '<td class="engine-cell"><span class="cell-price">' + (item.market_price||'—') + '</span>' + flag + '</td>';
+    }).join('') + '</tr>';
+
+    rows += '<tr><td class="item-label">Quick-turn</td>' + selected.map(function(eng) {
+      var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+      var item = (er.result.items || [])[idx] || {};
+      return '<td class="engine-cell"><span class="cell-price" style="color:var(--gold)">' + (item.quick_price||'—') + '</span></td>';
+    }).join('') + '</tr>';
+
+    rows += '<tr><td class="item-label">Dealer buys at</td>' + selected.map(function(eng) {
+      var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+      var item = (er.result.items || [])[idx] || {};
+      return '<td class="engine-cell"><span class="cell-price" style="color:var(--red)">' + (item.dealer_price||'—') + '</span></td>';
+    }).join('') + '</tr>';
+
+    rows += '<tr><td class="item-label">Rationale</td>' + selected.map(function(eng) {
+      var er = engineResults[eng]; if (!er || !er.result) return '<td class="engine-cell">—</td>';
+      var item = (er.result.items || [])[idx] || {};
+      return '<td class="engine-cell"><span class="cell-note">' + (item.rationale||'—') + '</span></td>';
+    }).join('') + '</tr>';
+  });
+
+  document.getElementById('results-area').innerHTML =
+    '<div class="compare-banner" style="background:#E6F4EA;border-color:rgba(45,106,79,.25);color:var(--green)">All ' + selected.length + ' engines finished. <strong>Yellow flags</strong> highlight where engines disagree.</div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">' +
+    '<button class="clear-btn" style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;cursor:pointer" onclick="clearAll()">Clear &amp; start over</button>' +
+    '</div>' +
+    '<div class="compare-table-wrap"><table class="compare-table">' +
+    '<thead><tr><th>Item / Field</th>' + headerCols + '</tr></thead>' +
+    '<tbody>' + rows + '</tbody>' +
+    '</table></div>';
+}
+
 function renderResults(result, bannerInfo) {
   lastResult = result;
   var items = result.items || [];
   var s = result.summary || {};
   var isCoins = mode === 'coins';
   var isMemo = mode === 'memo';
-  var modeLabel = isCoins ? 'Coin' : isMemo ? 'Memorabilia' : 'Book';
-  var foundLabel = isCoins ? 'Coins' : isMemo ? 'Items' : 'Books';
-  var totalLabel = isCoins ? 'Est. total' : isMemo ? 'Est. total' : 'Worth listing';
-  var totalVal = isCoins ? (s.total_market_value || '\u2014') : isMemo ? (s.total_market_value || '\u2014') : (s.worth_listing !== undefined ? s.worth_listing : '\u2014');
-  var highlightLabel = isCoins ? 'Top find' : isMemo ? 'Top find' : 'Value range';
-  var highlightVal = isCoins ? (s.highlight || '\u2014') : isMemo ? (s.highlight || '\u2014') : (s.total_market_value || '\u2014');
+  var isGlass = mode === 'glass';
+  var isElec = mode === 'elec';
+  var isBooks = mode === 'books';
+  var modeLabelMap = { books: 'Book', coins: 'Coin', memo: 'Memorabilia', glass: 'Glassware & Ceramics', elec: 'Electronics & Games' };
+  var modeLabel = modeLabelMap[mode] || 'Item';
+  var foundLabel = isCoins ? 'Coins' : isBooks ? 'Books' : 'Items';
+  var totalLabel = isBooks ? 'Worth listing' : 'Est. total';
+  var totalVal = isBooks ? (s.worth_listing !== undefined ? s.worth_listing : '\u2014') : (s.total_market_value || '\u2014');
+  var highlightLabel = 'Top find';
+  var highlightVal = isBooks ? (s.total_market_value || '\u2014') : (s.highlight || '\u2014');
   document.getElementById('results-area').innerHTML =
     '<div class="results">' +
     '<div class="model-banner ' + bannerInfo.cls + '">' + bannerInfo.note + '</div>' +
@@ -666,10 +1323,11 @@ function renderResults(result, bannerInfo) {
 }
 
 function clearAll() {
-  images = []; lastResult = null;
+  images = []; lastResult = null; engineResults = {};
   renderPreviews();
   document.getElementById('results-area').innerHTML = '';
   document.getElementById('error-area').innerHTML = '';
+  document.getElementById('extra-notes').value = '';
 }
 
 init();
